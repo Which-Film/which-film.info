@@ -1,5 +1,6 @@
 # Don’t commit the following directories created by pub.
 .buildlog
+.packages
 .pub/
 build/
 packages
@@ -11,4 +12,4 @@ packages
 *.js.map
 
 # Include when developing application packages.
-pubspec.lock
+#pubspec.lock
