@@ -13,9 +13,7 @@ class Movie {
 
   const Movie(this.title, this.year, this.url);
 
-  String fullName() {
-    return "${title} (${year})";
-  }
+  String get fullName => "${title} (${year})";
 }
 
 
