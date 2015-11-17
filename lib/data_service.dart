@@ -4,18 +4,7 @@ import "dart:async";
 import "dart:convert";
 import "dart:html";
 
-
-/// Metadata for a movie.
-class Movie {
-  final String title;
-  final int year;
-  final String url;
-
-  const Movie(this.title, this.year, this.url);
-
-  String get fullName => "${title} (${year})";
-}
-
+import "package:which-film/data_search.dart";
 
 /// Interface for a service the provides a user's movie preferences.
 abstract class DataService {
