@@ -44,5 +44,21 @@ Iterable<Set<String>> combinations(Iterable<String> iterable, r) sync* {
 
 
 Iterable<Movie> findMovies(Map<String, Set<Movie>> options) sync* {
-  yield null;
+  var seen = new Set();
+  var usernames = new List.from(options.keys);
+  for (var i = usernames.length; i >= 2; i--) {
+    for (var combo in combinations(usernames, i)) {
+      combo = combo.toList();
+      var matches = options[combo.removeLast()];
+      for (var username in combo) {
+        matches = matches.intersection(options[username]);
+      }
+      for (var match in matches) {
+        if (!seen.contains(match.fullName)) {
+          yield match;
+          seen.add(match.fullName);
+        }
+      }
+    }
+  }
 }
