@@ -1,7 +1,31 @@
+// pub run test test/data_search_test.dart
+
 import "package:test/test.dart";
 import "package:which-film/data_search.dart";
 
 void main() {
+  group("Movies", () {
+    var movie1 = new Movie("A", 2015, "url");
+    var movie2 = new Movie("A", 2015, "url");
+    var movie3 = new Movie("A", 1000, "url");
+    var movie4 = new Movie("B", 2015, "url");
+
+    test("equality", () {
+      expect(movie1, equals(movie2));
+      expect(movie1, isNot(equals(movie3)));
+      expect(movie1, isNot(equals(movie4)));
+    });
+
+    test("hashing", () {
+      var testSet = new Set()
+        ..add(movie1);
+
+      expect(testSet, contains(movie2));
+      expect(testSet, isNot(contains(movie3)));
+      expect(testSet, isNot(contains(movie4)));
+    });
+  });
+
   group("combinations", () {
     test("for two items", () {
         var options = new Set.from(["A", "B"]);
@@ -109,6 +133,18 @@ void main() {
       var got = findMovies(people).toList();
 
       expect(got, equals(want));
+    });
+
+    test("skip movies in the future", () {
+      var thisYear = new DateTime.now().year;
+      var nextYear = thisYear + 1;
+      var movie1 = new Movie("title", nextYear, "url");
+      var movieSet = new Set()
+        ..add(movie1);
+      var people = {"A": movieSet, "B": movieSet};
+      var got = findMovies(people).toList();
+
+      expect(got, isEmpty);
     });
   });
 }

@@ -6,7 +6,13 @@ class Movie {
 
   const Movie(this.title, this.year, this.url);
 
-  String get fullName => "${title} (${year})";
+  String toString() => "${title} (${year})";
+
+  bool operator ==(other) {
+    return other is Movie && title == other.title && year == other.year;
+  }
+
+  int get hashCode => toString().hashCode;
 }
 
 
@@ -44,7 +50,8 @@ Iterable<Set<String>> combinations(Iterable<String> iterable, r) sync* {
 
 
 Iterable<Movie> findMovies(Map<String, Set<Movie>> options) sync* {
-  var seen = new Set();
+  final thisYear = new DateTime.now().year;
+  var seen = new Set<String>();
   var usernames = new List.from(options.keys);
   for (var i = usernames.length; i >= 2; i--) {
     for (var combo in combinations(usernames, i)) {
@@ -54,9 +61,13 @@ Iterable<Movie> findMovies(Map<String, Set<Movie>> options) sync* {
         matches = matches.intersection(options[username]);
       }
       for (var match in matches) {
-        if (!seen.contains(match.fullName)) {
+        if (match.year > thisYear) {
+          // Don't bother with movies that are only available in the future.
+          seen.add(match.toString());
+        }
+        if (!seen.contains(match.toString())) {
           yield match;
-          seen.add(match.fullName);
+          seen.add(match.toString());
         }
       }
     }
