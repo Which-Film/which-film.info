@@ -56,11 +56,8 @@ Iterable<Movie> findMovies(Map<String, Set<Movie>> options) sync* {
     // Find all username combinations, from larget combinations to smallest
     // (where "smallest" is two usernames).
     for (var combo in combinations(usernames, i)) {
-      combo = combo.toList();
-      var matches = options[combo.removeLast()];
-      for (var username in combo) {
-        matches = matches.intersection(options[username]);
-      }
+      var movies = combo.map((username) => options[username]);
+      var matches = movies.reduce((x, y) => x.intersection(y));
       yield* matches.where((m) => m.year <= thisYear);
       options.values.forEach((s) => s.removeAll(matches));
     }
