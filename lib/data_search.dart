@@ -51,25 +51,18 @@ Iterable<Set<String>> combinations(Iterable<String> iterable, r) sync* {
 
 Iterable<Movie> findMovies(Map<String, Set<Movie>> options) sync* {
   final thisYear = new DateTime.now().year;
-  var seen = new Set<String>();
   var usernames = new List.from(options.keys);
   for (var i = usernames.length; i >= 2; i--) {
+    // Find all username combinations, from larget combinations to smallest
+    // (where "smallest" is two usernames).
     for (var combo in combinations(usernames, i)) {
       combo = combo.toList();
       var matches = options[combo.removeLast()];
       for (var username in combo) {
         matches = matches.intersection(options[username]);
       }
-      for (var match in matches) {
-        if (match.year > thisYear) {
-          // Don't bother with movies that are only available in the future.
-          seen.add(match.toString());
-        }
-        if (!seen.contains(match.toString())) {
-          yield match;
-          seen.add(match.toString());
-        }
-      }
+      yield* matches.where((m) => m.year <= thisYear);
+      options.values.forEach((s) => s.removeAll(matches));
     }
   }
 }
