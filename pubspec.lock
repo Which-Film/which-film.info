@@ -5,10 +5,6 @@ packages:
     description: analyzer
     source: hosted
     version: "0.26.1+17"
-  angular2:
-    description: angular2
-    source: hosted
-    version: "2.0.0-alpha.44"
   args:
     description: args
     source: hosted
@@ -21,26 +17,18 @@ packages:
     description: barback
     source: hosted
     version: "0.15.2+7"
-  browser:
-    description: browser
-    source: hosted
-    version: "0.10.0+2"
   charcode:
     description: charcode
     source: hosted
     version: "1.1.0"
-  cli_util:
-    description: cli_util
-    source: hosted
-    version: "0.0.1+2"
-  code_transformers:
-    description: code_transformers
-    source: hosted
-    version: "0.2.9+4"
   collection:
     description: collection
     source: hosted
     version: "1.1.3"
+  convert:
+    description: convert
+    source: hosted
+    version: "1.0.1"
   crypto:
     description: crypto
     source: hosted
@@ -49,14 +37,6 @@ packages:
     description: csslib
     source: hosted
     version: "0.12.2"
-  dart_style:
-    description: dart_style
-    source: hosted
-    version: "0.2.0"
-  fixnum:
-    description: fixnum
-    source: hosted
-    version: "0.9.1+2"
   glob:
     description: glob
     source: hosted
@@ -65,10 +45,18 @@ packages:
     description: html
     source: hosted
     version: "0.12.2"
-  intl:
-    description: intl
+  http:
+    description: http
     source: hosted
-    version: "0.12.4+2"
+    version: "0.11.3+2"
+  http_multi_server:
+    description: http_multi_server
+    source: hosted
+    version: "1.3.2"
+  http_parser:
+    description: http_parser
+    source: hosted
+    version: "1.1.0"
   logging:
     description: logging
     source: hosted
@@ -77,10 +65,10 @@ packages:
     description: matcher
     source: hosted
     version: "0.12.0+1"
-  observe:
-    description: observe
+  mime:
+    description: mime
     source: hosted
-    version: "0.13.1+2"
+    version: "0.9.3"
   package_config:
     description: package_config
     source: hosted
@@ -89,10 +77,6 @@ packages:
     description: path
     source: hosted
     version: "1.3.6"
-  petitparser:
-    description: petitparser
-    source: hosted
-    version: "1.5.0"
   plugin:
     description: plugin
     source: hosted
@@ -101,18 +85,26 @@ packages:
     description: pool
     source: hosted
     version: "1.2.1"
-  protobuf:
-    description: protobuf
+  pub_semver:
+    description: pub_semver
     source: hosted
-    version: "0.4.2"
-  quiver:
-    description: quiver
+    version: "1.2.3"
+  shelf:
+    description: shelf
     source: hosted
-    version: "0.21.4"
-  smoke:
-    description: smoke
+    version: "0.6.4+1"
+  shelf_static:
+    description: shelf_static
     source: hosted
-    version: "0.3.5"
+    version: "0.2.3+1"
+  shelf_web_socket:
+    description: shelf_web_socket
+    source: hosted
+    version: "0.0.1+4"
+  source_map_stack_trace:
+    description: source_map_stack_trace
+    source: hosted
+    version: "1.0.4"
   source_maps:
     description: source_maps
     source: hosted
@@ -129,6 +121,14 @@ packages:
     description: string_scanner
     source: hosted
     version: "0.1.4"
+  test:
+    description: test
+    source: hosted
+    version: "0.12.5+1"
+  typed_data:
+    description: typed_data
+    source: hosted
+    version: "1.1.1"
   utf:
     description: utf
     source: hosted
@@ -137,14 +137,6 @@ packages:
     description: watcher
     source: hosted
     version: "0.9.7"
-  when:
-    description: when
-    source: hosted
-    version: "0.2.0"
-  which:
-    description: which
-    source: hosted
-    version: "0.1.3"
   yaml:
     description: yaml
     source: hosted
