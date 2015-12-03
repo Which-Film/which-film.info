@@ -5,6 +5,10 @@ packages:
     description: analyzer
     source: hosted
     version: "0.26.1+17"
+  angular2:
+    description: angular2
+    source: hosted
+    version: "2.0.0-alpha.45"
   args:
     description: args
     source: hosted
@@ -17,10 +21,22 @@ packages:
     description: barback
     source: hosted
     version: "0.15.2+7"
+  browser:
+    description: browser
+    source: hosted
+    version: "0.10.0+2"
   charcode:
     description: charcode
     source: hosted
     version: "1.1.0"
+  cli_util:
+    description: cli_util
+    source: hosted
+    version: "0.0.1+2"
+  code_transformers:
+    description: code_transformers
+    source: hosted
+    version: "0.2.9+4"
   collection:
     description: collection
     source: hosted
@@ -37,6 +53,14 @@ packages:
     description: csslib
     source: hosted
     version: "0.12.2"
+  dart_style:
+    description: dart_style
+    source: hosted
+    version: "0.2.0"
+  fixnum:
+    description: fixnum
+    source: hosted
+    version: "0.10.2"
   glob:
     description: glob
     source: hosted
@@ -57,6 +81,10 @@ packages:
     description: http_parser
     source: hosted
     version: "1.1.0"
+  intl:
+    description: intl
+    source: hosted
+    version: "0.12.4+2"
   logging:
     description: logging
     source: hosted
@@ -69,6 +97,10 @@ packages:
     description: mime
     source: hosted
     version: "0.9.3"
+  observe:
+    description: observe
+    source: hosted
+    version: "0.13.1+2"
   package_config:
     description: package_config
     source: hosted
@@ -77,6 +109,10 @@ packages:
     description: path
     source: hosted
     version: "1.3.6"
+  petitparser:
+    description: petitparser
+    source: hosted
+    version: "1.5.0"
   plugin:
     description: plugin
     source: hosted
@@ -85,10 +121,18 @@ packages:
     description: pool
     source: hosted
     version: "1.2.1"
+  protobuf:
+    description: protobuf
+    source: hosted
+    version: "0.5.0+1"
   pub_semver:
     description: pub_semver
     source: hosted
     version: "1.2.3"
+  quiver:
+    description: quiver
+    source: hosted
+    version: "0.21.4"
   shelf:
     description: shelf
     source: hosted
@@ -101,6 +145,10 @@ packages:
     description: shelf_web_socket
     source: hosted
     version: "0.0.1+4"
+  smoke:
+    description: smoke
+    source: hosted
+    version: "0.3.5"
   source_map_stack_trace:
     description: source_map_stack_trace
     source: hosted
@@ -137,6 +185,14 @@ packages:
     description: watcher
     source: hosted
     version: "0.9.7"
+  when:
+    description: when
+    source: hosted
+    version: "0.2.0"
+  which:
+    description: which
+    source: hosted
+    version: "0.1.3"
   yaml:
     description: yaml
     source: hosted
