@@ -12,7 +12,6 @@ class TraktWebService extends TraktService {
     var url = watchlistUrl(username);
     var response = await HttpRequest.request(
       url,
-      responseType: "json",
       requestHeaders: TraktService.requestHeaders
     );
     // TODO: check for errors.
