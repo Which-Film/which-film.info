@@ -1,4 +1,4 @@
-library which_film.data_service;
+library which_film.vm_data_service;
 
 import "dart:async";
 
