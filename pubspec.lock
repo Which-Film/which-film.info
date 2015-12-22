@@ -57,6 +57,10 @@ packages:
     description: dart_style
     source: hosted
     version: "0.2.0"
+  dart_to_js_script_rewriter:
+    description: dart_to_js_script_rewriter
+    source: hosted
+    version: "0.1.0+4"
   fixnum:
     description: fixnum
     source: hosted

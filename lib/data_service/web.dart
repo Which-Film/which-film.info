@@ -1,4 +1,4 @@
-library which_film.data_service;
+library which_film.web_data_service;
 
 import "dart:async";
 import "dart:html";
