@@ -8,7 +8,7 @@ void main() {
   group("Trakt VM data service", () {
     test("live network request", () async {
       var client = new TraktVmService();
-      var movies = await client.watchlist("nothingbutsnark");
+      var movies = await client.watchlist("brettcannon");
 
       expect(movies.length, greaterThan(0));
     });
