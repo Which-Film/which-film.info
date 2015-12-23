@@ -32,10 +32,12 @@ class AppComponent {
       Future.wait(movieFutures)
         .then((movieData) {
           var data = {};
-          for (var i = 0; i < users.length; i++) {
-            data[users[i]] = movieData[i];
-          }
-          movies = findMovies(data);
+          movieData.forEach(
+            (movieSet) => updateMovies(data, movieSet, WhyChosen.watchlist));
+          var acceptableMovies = data.values.where(
+            (m) => m.score > WhyChosen.watchlist.index).toList();
+          acceptableMovies.sort((x, y) => x.compareTo(y) * -1);
+          movies = acceptableMovies;
       });
   }
 }

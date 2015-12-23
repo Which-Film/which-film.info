@@ -11,17 +11,14 @@ void main(List<String> args) {
   var futureMovies = args.map(client.watchlist);
   Future.wait(futureMovies)
     .then((movieData) {
-      var data = {};
-      for (var i = 0; i < args.length; i++) {
-        data[args[i]] = movieData[i];
-      }
-      for (var username in data.keys) {
-        print("${username} has ${data[username].length} movies");
-      }
       print("");
-
-      print("Finding matches ...");
-      for (var match in findMovies(data)) {
+      var data = {};
+      movieData.forEach(
+        (movieSet) => updateMovies(data, movieSet, WhyChosen.watchlist));
+      var acceptableMovies = data.values.where(
+        (m) => m.score > WhyChosen.watchlist.index).toList();
+      acceptableMovies.sort((x, y) => x.compareTo(y) * -1);
+      for (var match in acceptableMovies) {
         print(match);
       }
       client.close();
