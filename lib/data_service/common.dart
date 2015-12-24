@@ -17,8 +17,19 @@ abstract class TraktService {
   /// Abstract network request for a user's watchlist.
   Future<String> fetchWatchlist(String username);
 
+  /// Abstract network request for a user's ratings.
+  Future<String> fetchRatings(String username);
+
   String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
                                           "users/${username}/watchlist/movies";
+  String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
+                                        "${username}/ratings/movies";
+
+  Movie _makeMovie(Map jsonData) {
+    var slug = jsonData["ids"]["slug"];
+    var url = "https://trakt.tv/movies/${slug}";
+    return new Movie(jsonData["title"], jsonData["year"], url);
+  }
 
   Future<Set<Movie>> watchlist(String username) async {
     var responseText = await fetchWatchlist(username);
@@ -26,12 +37,23 @@ abstract class TraktService {
     var jsonData = JSON.decode(responseText);
     var movies = new Set<Movie>();
     for (var watchlistData in jsonData) {
-      var movieData = watchlistData["movie"];
-      var slug = movieData["slug"];
-      var url = "https://trakt.tv/movies/${slug}";
-      movies.add(new Movie(movieData["title"], movieData["year"], url));
+      movies.add(_makeMovie(watchlistData["movie"]));
     }
 
     return movies;
+  }
+
+  Future<Map<Movie, int>> ratings(String username) async {
+    var responseText = await fetchRatings(username);
+    // TODO: check if response succeeded.
+    var jsonData = JSON.decode(responseText);
+    var ratings = new Map<Movie, int>();
+    for (var ratingData in jsonData) {
+      var rating = ratingData["rating"];
+      var movie = _makeMovie(ratingData["movie"]);
+      ratings[movie] = rating;
+    }
+
+    return ratings;
   }
 }
