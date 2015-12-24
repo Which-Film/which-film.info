@@ -19,6 +19,16 @@ void main(List<String> args) {
         updateMovies(data, userData.ratings[8], WhyChosen.rating08);
         updateMovies(data, userData.ratings[9], WhyChosen.rating09);
         updateMovies(data, userData.ratings[10], WhyChosen.rating10);
+        userData.lastWatched.forEach((m, d) {
+          if (data.containsKey(m)) {
+            var movie = data[m];
+            if (movie.lastWatched == null) {
+              movie.lastWatched = d;
+            } else if (movie.lastWatched.isBefore(d)) {
+                movie.lastWatched = d;
+            }
+          }
+        });
       }
 
       var thisYear = (new DateTime.now()).year;

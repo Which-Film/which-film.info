@@ -27,4 +27,9 @@ class TraktWebService extends TraktService {
   Future<String> fetchRatings(String username) async {
     return _fetch(ratingsUrl(username));
   }
+
+  @override
+  Future<String> fetchLastWatched(String username) async {
+    return _fetch(lastWatchedUrl(username));
+  }
 }

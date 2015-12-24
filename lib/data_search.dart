@@ -30,6 +30,7 @@ class ChosenMovie extends Movie implements Comparable {
   int _score = 0;
   int _numberOfReasons = 0;
   final Map<WhyChosen, int> reasonCount = new Map();
+  DateTime lastWatched;
 
   ChosenMovie(title, year, url): super(title, year, url);
 
@@ -38,7 +39,22 @@ class ChosenMovie extends Movie implements Comparable {
   int get score => _score;
   int get numberOfReasons => _numberOfReasons;
 
-  int compareTo(ChosenMovie other) => _score.compareTo(other.score);
+  int compareTo(ChosenMovie other) {
+    int order  = _score.compareTo(other.score);
+    if (order == 0) {
+      if (lastWatched != null) {
+        if (other.lastWatched == null) {
+          order = -1;
+        } else {
+          order = lastWatched.compareTo(other.lastWatched) * -1;
+        }
+      } else if (other.lastWatched != null) {
+        order = 1;
+      }
+    }
+
+    return order;
+  }
 
   void addReason(WhyChosen reason) {
     reasonCount[reason] = reasonCount.putIfAbsent(reason, () => 0) + 1;
@@ -46,7 +62,7 @@ class ChosenMovie extends Movie implements Comparable {
     _numberOfReasons += 1;
   }
 
-  String _reasonStringPart(WhyChosen reason, String name, List<String> parts) {
+  void _reasonStringPart(WhyChosen reason, String name, List<String> parts) {
     if (reasonCount.containsKey(reason)) {
       parts.add("${name}: ${reasonCount[reason]}");
     }
@@ -58,6 +74,13 @@ class ChosenMovie extends Movie implements Comparable {
     _reasonStringPart(WhyChosen.rating10, "ten stars", parts);
     _reasonStringPart(WhyChosen.rating09, "nine stars", parts);
     _reasonStringPart(WhyChosen.rating08, "eight stars", parts);
+    if (lastWatched != null) {
+      var yearString = lastWatched.year.toString();
+      var monthString = lastWatched.month.toString().padLeft(2, "0");
+      var dayString = lastWatched.day.toString().padLeft(2, "0");
+      parts.add("last watched on " +
+                "${yearString}-${monthString}-${dayString}");
+    }
 
     return parts.join(", ");
   }

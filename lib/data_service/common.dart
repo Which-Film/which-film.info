@@ -9,8 +9,9 @@ import "package:which-film/data_search.dart";
 class UserData {
   Set<Movie> watchlist;
   Map<int, Set<Movie>> ratings;
+  Map<Movie, DateTime> lastWatched;
 
-  UserData(this.watchlist, this.ratings) {
+  UserData(this.watchlist, this.ratings, this.lastWatched) {
     // Guarantee that there is a set for every possible rating to avoid other
     // code needing to check if a rating key exists.
     for (var x = 1; x <= 10; x++) {
@@ -34,10 +35,14 @@ abstract class TraktService {
   /// Abstract network request for a user's ratings.
   Future<String> fetchRatings(String username);
 
+  Future<String> fetchLastWatched(String username);
+
   String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
                                           "users/${username}/watchlist/movies";
   String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
                                         "${username}/ratings/movies";
+  String lastWatchedUrl(String username) => "https://api-v2launch.trakt.tv/" +
+                                            "users/${username}/watched/movies";
 
   Movie _makeMovie(Map jsonData) {
     var slug = jsonData["ids"]["slug"];
@@ -71,10 +76,25 @@ abstract class TraktService {
     return ratings;
   }
 
+  Future<Map<Movie, DateTime>> lastWatched(String username) async {
+    var responseText = await fetchLastWatched(username);
+    // TODO: check if response succeeded.
+    var jsonData = JSON.decode(responseText);
+    var lastWatchedMap = new Map<Movie, DateTime>();
+    for (var lastWatchedData in jsonData) {
+      var lastWatched = DateTime.parse(lastWatchedData["last_watched_at"]);
+      var movie = _makeMovie(lastWatchedData["movie"]);
+      lastWatchedMap[movie] = lastWatched;
+    }
+
+    return lastWatchedMap;
+  }
+
   Future<UserData> fetchData(String username) async {
     var watchlistData = await watchlist(username);
     var ratingsData = await ratings(username);
+    var lastWatchedData = await lastWatched(username);
 
-    return new UserData(watchlistData, ratingsData);
+    return new UserData(watchlistData, ratingsData, lastWatchedData);
   }
 }

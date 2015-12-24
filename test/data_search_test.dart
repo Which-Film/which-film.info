@@ -78,6 +78,21 @@ void main() {
       expect(movie.compareTo(lesserMovie), equals(1));
       expect(lesserMovie.compareTo(movie), equals(-1));
       expect(movie.compareTo(equalMovie), equals(0));
+
+      var neverWatched = new ChosenMovie("A", 2015, "url");
+      var watchedToday = new ChosenMovie.fromMovie(neverWatched);
+      watchedToday.lastWatched = new DateTime.now();
+      var watchedYesterday = new ChosenMovie.fromMovie(watchedToday);
+      watchedYesterday.lastWatched =
+        watchedToday.lastWatched.subtract(new Duration(days: 1));
+
+      expect(neverWatched.score, equals(watchedToday.score));
+      expect(watchedToday.compareTo(neverWatched), equals(-1));
+      expect(neverWatched.compareTo(watchedToday), equals(1));
+
+      expect(watchedToday.score, equals(watchedYesterday.score));
+      expect(watchedToday.compareTo(watchedYesterday), equals(-1));
+      expect(watchedYesterday.compareTo(watchedToday), equals(1));
     });
 
     test("reasonsString()", () {
@@ -93,6 +108,9 @@ void main() {
 
       movie.addReason(WhyChosen.rating08);
       expect(movie.reasonsString(), contains("eight"));
+
+      movie.lastWatched = new DateTime(2016, 1, 2);
+      expect(movie.reasonsString(), contains("2016-01-02"));
     });
   });
 
