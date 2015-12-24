@@ -40,13 +40,25 @@ void main() {
     test("addReason()/score", () {
       var movie = new ChosenMovie("A", 2015, "url");
       expect(movie.score, equals(0));
+      expect(movie.numberOfReasons, equals(0));
 
       movie.addReason(WhyChosen.rating08);
       expect(movie.score, equals(WhyChosen.rating08.index));
+      expect(movie.numberOfReasons, equals(1));
+      expect(movie.reasonCount[WhyChosen.rating08], equals(1));
 
       movie.addReason(WhyChosen.rating09);
       expect(movie.score,
         equals(WhyChosen.rating08.index + WhyChosen.rating09.index));
+      expect(movie.numberOfReasons, equals(2));
+      expect(movie.reasonCount, hasLength(2));
+      expect(movie.reasonCount[WhyChosen.rating08], equals(1));
+      expect(movie.reasonCount[WhyChosen.rating09], equals(1));
+
+      movie.addReason(WhyChosen.rating09);
+      expect(movie.numberOfReasons, equals(3));
+      expect(movie.reasonCount[WhyChosen.rating08], equals(1));
+      expect(movie.reasonCount[WhyChosen.rating09], equals(2));
 
       var rating8Movie = new ChosenMovie("A", 2015, "url");
       rating8Movie.addReason(WhyChosen.rating08);
@@ -66,6 +78,21 @@ void main() {
       expect(movie.compareTo(lesserMovie), equals(1));
       expect(lesserMovie.compareTo(movie), equals(-1));
       expect(movie.compareTo(equalMovie), equals(0));
+    });
+
+    test("reasonsString()", () {
+      var movie = new ChosenMovie("A", 2015, "url");
+      movie.addReason(WhyChosen.watchlist);
+      expect(movie.reasonsString(), contains("watchlist"));
+
+      movie.addReason(WhyChosen.rating10);
+      expect(movie.reasonsString(), contains("ten"));
+
+      movie.addReason(WhyChosen.rating09);
+      expect(movie.reasonsString(), contains("nine"));
+
+      movie.addReason(WhyChosen.rating08);
+      expect(movie.reasonsString(), contains("eight"));
     });
   });
 

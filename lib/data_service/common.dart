@@ -6,6 +6,20 @@ import "dart:convert";
 import "package:which-film/data_search.dart";
 
 
+class UserData {
+  Set<Movie> watchlist;
+  Map<int, Set<Movie>> ratings;
+
+  UserData(this.watchlist, this.ratings) {
+    // Guarantee that there is a set for every possible rating to avoid other
+    // code needing to check if a rating key exists.
+    for (var x = 1; x <= 10; x++) {
+      ratings.putIfAbsent(x, () => new Set());
+    }
+  }
+}
+
+
 /// A data service for trakt.tv.
 abstract class TraktService {
   static final requestHeaders = {
@@ -43,17 +57,24 @@ abstract class TraktService {
     return movies;
   }
 
-  Future<Map<Movie, int>> ratings(String username) async {
+  Future<Map<int, Set<Movie>>> ratings(String username) async {
     var responseText = await fetchRatings(username);
     // TODO: check if response succeeded.
     var jsonData = JSON.decode(responseText);
-    var ratings = new Map<Movie, int>();
+    var ratings = new Map<int, Set<Movie>>();
     for (var ratingData in jsonData) {
       var rating = ratingData["rating"];
       var movie = _makeMovie(ratingData["movie"]);
-      ratings[movie] = rating;
+      ratings.putIfAbsent(rating, () => new Set()).add(movie);
     }
 
     return ratings;
+  }
+
+  Future<UserData> fetchData(String username) async {
+    var watchlistData = await watchlist(username);
+    var ratingsData = await ratings(username);
+
+    return new UserData(watchlistData, ratingsData);
   }
 }
