@@ -1,9 +1,15 @@
+/**
+ * To test locally:
+ * > pub serve
+ * > open -a "Google Chrome" --args "--disable-web-security"
+ */
 library which_film.ui;
 
 import 'dart:async';
 
 import 'package:angular2/angular2.dart';
 
+import 'package:which-film/data_service/common.dart';
 import 'package:which-film/data_service/web.dart';
 import 'package:which-film/data_search.dart';
 
@@ -28,14 +34,31 @@ class AppComponent {
   fetchMovies(List<String> users) {
       var traktClient = new TraktWebService();
       users = users.where((username) => username.isNotEmpty).toList();
-      var movieFutures = users.map(traktClient.watchlist);
+      var movieFutures = users.map(traktClient.fetchData);
       Future.wait(movieFutures)
-        .then((movieData) {
+        .then((userDataIterable) {
           var data = {};
-          movieData.forEach(
-            (movieSet) => updateMovies(data, movieSet, WhyChosen.watchlist));
+          for (UserData userData in userDataIterable) {
+            updateMovies(data, userData.watchlist, WhyChosen.watchlist);
+            updateMovies(data, userData.ratings[8], WhyChosen.rating08);
+            updateMovies(data, userData.ratings[9], WhyChosen.rating09);
+            updateMovies(data, userData.ratings[10], WhyChosen.rating10);
+            userData.lastWatched.forEach((m, d) {
+              if (data.containsKey(m)) {
+                var movie = data[m];
+                if (movie.lastWatched == null) {
+                  movie.lastWatched = d;
+                } else if (movie.lastWatched.isBefore(d)) {
+                    movie.lastWatched = d;
+                }
+              }
+            });
+          }
+
+          var thisYear = (new DateTime.now()).year;
           var acceptableMovies = data.values.where(
-            (m) => m.score > WhyChosen.watchlist.index).toList();
+            (m) => m.numberOfReasons > 1 && m.year <= thisYear)
+            .toList();
           acceptableMovies.sort((x, y) => x.compareTo(y) * -1);
           movies = acceptableMovies;
       });
