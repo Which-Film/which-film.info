@@ -91,6 +91,11 @@ abstract class TraktService {
   }
 
   Future<UserData> fetchData(String username) async {
+    // It would be more optimal to fan-out all of these calls individually
+    // and then fan-in so that e.g., if you are making requests for two
+    // people then you are making 6 concurrent requests instead only two
+    // at a time. Trick is reconciling the responses back to users
+    // (although maybe that isn't important in the end?).
     var watchlistData = await watchlist(username);
     var ratingsData = await ratings(username);
     var lastWatchedData = await lastWatched(username);
