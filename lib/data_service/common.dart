@@ -6,6 +6,21 @@ import "dart:convert";
 import "package:which-film/data_search.dart";
 
 
+class UserData {
+  Set<Movie> watchlist;
+  Map<int, Set<Movie>> ratings;
+  Map<Movie, DateTime> lastWatched;
+
+  UserData(this.watchlist, this.ratings, this.lastWatched) {
+    // Guarantee that there is a set for every possible rating to avoid other
+    // code needing to check if a rating key exists.
+    for (var x = 1; x <= 10; x++) {
+      ratings.putIfAbsent(x, () => new Set());
+    }
+  }
+}
+
+
 /// A data service for trakt.tv.
 abstract class TraktService {
   static final requestHeaders = {
@@ -17,8 +32,23 @@ abstract class TraktService {
   /// Abstract network request for a user's watchlist.
   Future<String> fetchWatchlist(String username);
 
+  /// Abstract network request for a user's ratings.
+  Future<String> fetchRatings(String username);
+
+  Future<String> fetchLastWatched(String username);
+
   String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
                                           "users/${username}/watchlist/movies";
+  String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
+                                        "${username}/ratings/movies";
+  String lastWatchedUrl(String username) => "https://api-v2launch.trakt.tv/" +
+                                            "users/${username}/watched/movies";
+
+  Movie _makeMovie(Map jsonData) {
+    var slug = jsonData["ids"]["slug"];
+    var url = "https://trakt.tv/movies/${slug}";
+    return new Movie(jsonData["title"], jsonData["year"], url);
+  }
 
   Future<Set<Movie>> watchlist(String username) async {
     var responseText = await fetchWatchlist(username);
@@ -26,12 +56,45 @@ abstract class TraktService {
     var jsonData = JSON.decode(responseText);
     var movies = new Set<Movie>();
     for (var watchlistData in jsonData) {
-      var movieData = watchlistData["movie"];
-      var slug = movieData["slug"];
-      var url = "https://trakt.tv/movies/${slug}";
-      movies.add(new Movie(movieData["title"], movieData["year"], url));
+      movies.add(_makeMovie(watchlistData["movie"]));
     }
 
     return movies;
+  }
+
+  Future<Map<int, Set<Movie>>> ratings(String username) async {
+    var responseText = await fetchRatings(username);
+    // TODO: check if response succeeded.
+    var jsonData = JSON.decode(responseText);
+    var ratings = new Map<int, Set<Movie>>();
+    for (var ratingData in jsonData) {
+      var rating = ratingData["rating"];
+      var movie = _makeMovie(ratingData["movie"]);
+      ratings.putIfAbsent(rating, () => new Set()).add(movie);
+    }
+
+    return ratings;
+  }
+
+  Future<Map<Movie, DateTime>> lastWatched(String username) async {
+    var responseText = await fetchLastWatched(username);
+    // TODO: check if response succeeded.
+    var jsonData = JSON.decode(responseText);
+    var lastWatchedMap = new Map<Movie, DateTime>();
+    for (var lastWatchedData in jsonData) {
+      var lastWatched = DateTime.parse(lastWatchedData["last_watched_at"]);
+      var movie = _makeMovie(lastWatchedData["movie"]);
+      lastWatchedMap[movie] = lastWatched;
+    }
+
+    return lastWatchedMap;
+  }
+
+  Future<UserData> fetchData(String username) async {
+    var watchlistData = await watchlist(username);
+    var ratingsData = await ratings(username);
+    var lastWatchedData = await lastWatched(username);
+
+    return new UserData(watchlistData, ratingsData, lastWatchedData);
   }
 }

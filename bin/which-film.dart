@@ -2,28 +2,41 @@ import "dart:async";
 import "dart:io";
 
 import "package:which-film/data_search.dart";
+import "package:which-film/data_service/common.dart";
 import "package:which-film/data_service/vm.dart";
 
 
 void main(List<String> args) {
   var client = new TraktVmService();
-  print("Fetching watchlists ...");
-  var futureMovies = args.map(client.watchlist);
-  Future.wait(futureMovies)
-    .then((movieData) {
-      var data = {};
-      for (var i = 0; i < args.length; i++) {
-        data[args[i]] = movieData[i];
-      }
-      for (var username in data.keys) {
-        print("${username} has ${data[username].length} movies");
-      }
+  print("Fetching user data ...");
+  var futureUserData = args.map(client.fetchData);
+  Future.wait(futureUserData)
+    .then((userDataIterable) {
       print("");
-
-      print("Finding matches ...");
-      for (var match in findMovies(data)) {
-        print(match);
+      var data = {};
+      for (UserData userData in userDataIterable) {
+        updateMovies(data, userData.watchlist, WhyChosen.watchlist);
+        updateMovies(data, userData.ratings[8], WhyChosen.rating08);
+        updateMovies(data, userData.ratings[9], WhyChosen.rating09);
+        updateMovies(data, userData.ratings[10], WhyChosen.rating10);
+        userData.lastWatched.forEach((m, d) {
+          if (data.containsKey(m)) {
+            var movie = data[m];
+            if (movie.lastWatched == null) {
+              movie.lastWatched = d;
+            } else if (movie.lastWatched.isBefore(d)) {
+                movie.lastWatched = d;
+            }
+          }
+        });
       }
+
+      var thisYear = (new DateTime.now()).year;
+      var acceptableMovies = data.values.where(
+        (m) => m.numberOfReasons > 1 && m.year <= thisYear)
+        .toList();
+      acceptableMovies.sort((x, y) => x.compareTo(y) * -1);
+      acceptableMovies.forEach((m) => print("${m} [${m.reasonsString()}]"));
       client.close();
       exit(0);
     });

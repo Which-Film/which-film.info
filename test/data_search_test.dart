@@ -26,125 +26,112 @@ void main() {
     });
   });
 
-  group("combinations", () {
-    test("for two items", () {
-        var options = new Set.from(["A", "B"]);
-        var got = combinations(options.toSet(), 2).toSet();
-        var want = new Set()
-          ..add(new Set.from(["A", "B"]));
-        expect(got, equals(want));
+  group("ChosenMovie", () {
+    test("hashing/equality same as Movie", () {
+      var plainMovie = new Movie("A", 2015, "url");
+      var chosenMovie = new ChosenMovie.fromMovie(plainMovie);
+      expect(chosenMovie, equals(plainMovie));
+
+      var container = new Set()
+        ..add(chosenMovie);
+      expect(container, contains(plainMovie));
     });
 
-    test("for three items", () {
-      var options = new Set.from(["A", "B", "C"]);
-      var got = combinations(options, 3).toSet();
-      var want = new Set()
-        ..add(new Set.from(["A", "B", "C"]));
-      expect(got, equals(want));
+    test("addReason()/score", () {
+      var movie = new ChosenMovie("A", 2015, "url");
+      expect(movie.score, equals(0));
+      expect(movie.numberOfReasons, equals(0));
 
-      got = combinations(options, 2).toSet();
-      want = new Set()
-        ..add(new Set.from(["A", "B"]))
-        ..add(new Set.from(["A", "C"]))
-        ..add(new Set.from(["B", "C"]));
-      expect(got, equals(want));
+      movie.addReason(WhyChosen.rating08);
+      expect(movie.score, equals(WhyChosen.rating08.index));
+      expect(movie.numberOfReasons, equals(1));
+      expect(movie.reasonCount[WhyChosen.rating08], equals(1));
+
+      movie.addReason(WhyChosen.rating09);
+      expect(movie.score,
+        equals(WhyChosen.rating08.index + WhyChosen.rating09.index));
+      expect(movie.numberOfReasons, equals(2));
+      expect(movie.reasonCount, hasLength(2));
+      expect(movie.reasonCount[WhyChosen.rating08], equals(1));
+      expect(movie.reasonCount[WhyChosen.rating09], equals(1));
+
+      movie.addReason(WhyChosen.rating09);
+      expect(movie.numberOfReasons, equals(3));
+      expect(movie.reasonCount[WhyChosen.rating08], equals(1));
+      expect(movie.reasonCount[WhyChosen.rating09], equals(2));
+
+      var rating8Movie = new ChosenMovie("A", 2015, "url");
+      rating8Movie.addReason(WhyChosen.rating08);
+      var watchlistMovie = new ChosenMovie("B", 2015, "url");
+      watchlistMovie.addReason(WhyChosen.watchlist);
+      expect(watchlistMovie.score, greaterThan(rating8Movie.score));
     });
 
-    test("for four items", () {
-      var options = new Set.from(["A", "B", "C", "D"]);
-      var got = combinations(options, 4).toSet();
-      var want = new Set()
-        ..add(new Set.from(["A", "B", "C", "D"]));
-      expect(got, equals(want));
+    test("compareTo()", () {
+      var movie = new ChosenMovie("A", 2015, "url");
+      movie.addReason(WhyChosen.rating09);
+      var lesserMovie = new ChosenMovie("B", 2015, "url");
+      lesserMovie.addReason(WhyChosen.rating08);
+      var equalMovie = new ChosenMovie("C", 2015, "url");
+      equalMovie.addReason(WhyChosen.rating09);
 
-      got = combinations(options, 3).toSet();
-      want = new Set()
-        ..add(new Set.from(["A", "B", "C"]))
-        ..add(new Set.from(["A", "B", "D"]))
-        ..add(new Set.from(["A", "C", "D"]))
-        ..add(new Set.from(["B", "C", "D"]));
-      expect(got, equals(want));
+      expect(movie.compareTo(lesserMovie), equals(1));
+      expect(lesserMovie.compareTo(movie), equals(-1));
+      expect(movie.compareTo(equalMovie), equals(0));
 
-      got = combinations(options, 2).toSet();
-      want = new Set()
-        ..add(new Set.from(["A", "B"]))
-        ..add(new Set.from(["A", "C"]))
-        ..add(new Set.from(["A", "D"]))
-        ..add(new Set.from(["B", "C"]))
-        ..add(new Set.from(["B", "D"]))
-        ..add(new Set.from(["C", "D"]));
-      expect(got, equals(want));
+      var neverWatched = new ChosenMovie("A", 2015, "url");
+      var watchedToday = new ChosenMovie.fromMovie(neverWatched);
+      watchedToday.lastWatched = new DateTime.now();
+      var watchedYesterday = new ChosenMovie.fromMovie(watchedToday);
+      watchedYesterday.lastWatched =
+        watchedToday.lastWatched.subtract(new Duration(days: 1));
+
+      expect(neverWatched.score, equals(watchedToday.score));
+      expect(watchedToday.compareTo(neverWatched), equals(-1));
+      expect(neverWatched.compareTo(watchedToday), equals(1));
+
+      expect(watchedToday.score, equals(watchedYesterday.score));
+      expect(watchedToday.compareTo(watchedYesterday), equals(-1));
+      expect(watchedYesterday.compareTo(watchedToday), equals(1));
+    });
+
+    test("reasonsString()", () {
+      var movie = new ChosenMovie("A", 2015, "url");
+      movie.addReason(WhyChosen.watchlist);
+      expect(movie.reasonsString(), contains("watchlist"));
+
+      movie.addReason(WhyChosen.rating10);
+      expect(movie.reasonsString(), contains("ten"));
+
+      movie.addReason(WhyChosen.rating09);
+      expect(movie.reasonsString(), contains("nine"));
+
+      movie.addReason(WhyChosen.rating08);
+      expect(movie.reasonsString(), contains("eight"));
+
+      movie.lastWatched = new DateTime(2016, 1, 2);
+      expect(movie.reasonsString(), contains("2016-01-02"));
     });
   });
 
-  group("findMovies()", () {
-    var socialNetwork = new Movie(
-      "The Social Network",
-      2010,
-      "https://trakt.tv/movies/the-social-network-2010"
-    );
-    var inception = new Movie(
-      "Inception",
-      2010,
-      "https://trakt.tv/movies/inception-2010"
-    );
-    var insideOut = new Movie(
-      "Inside Out",
-      2015,
-      "https://trakt.tv/movies/inside-out-2015"
-    );
+  test("updateMovies()", () {
+    var movie1 = new Movie("1", 2015, "url");
+    var movie2 = new Movie("2", 2015, "url");
+    var movie3 = new Movie("3", 2015, "url");
+    var processed = new Map();
 
-    test("movie everyone agrees on", () {
-      var movieSet = new Set()
-        ..add(socialNetwork);
-      var people = {"A": movieSet, "B": movieSet, "C": movieSet, "D": movieSet};
-      var want = [socialNetwork];
-      var got = findMovies(people).toList();
+    updateMovies(processed, [movie1, movie2], WhyChosen.rating10);
+    expect(processed, contains(movie1));
+    expect(processed, contains(movie2));
+    processed.values.forEach(
+      (v) => expect(v.score, equals(WhyChosen.rating10.index)));
 
-      expect(got, equals(want));
-    });
+    updateMovies(processed, [movie3], WhyChosen.watchlist);
+    expect(processed, contains(movie3));
+    expect(processed[movie3].score, equals(WhyChosen.watchlist.index));
 
-    test("only return movies that match 2 or more people", () {
-      var setA = new Set()
-        ..add(socialNetwork)
-        ..add(inception);
-      var setB = new Set()
-        ..add(socialNetwork)
-        ..add(insideOut);
-      var people = {"A": setA, "B": setB};
-      var want = [socialNetwork];
-      var got = findMovies(people).toList();
-
-      expect(got, equals(want));
-    });
-
-    test("start with best matches", () {
-      var setA = new Set()
-        ..add(socialNetwork)
-        ..add(inception);
-      var setB = new Set()
-        ..add(socialNetwork)
-        ..add(inception);
-      var setC = new Set()
-        ..add(socialNetwork)
-        ..add(insideOut);
-      var people = {"A": setA, "B": setB, "C": setC};
-      var want = [socialNetwork, inception];
-      var got = findMovies(people).toList();
-
-      expect(got, equals(want));
-    });
-
-    test("skip movies in the future", () {
-      var thisYear = new DateTime.now().year;
-      var nextYear = thisYear + 1;
-      var movie1 = new Movie("title", nextYear, "url");
-      var movieSet = new Set()
-        ..add(movie1);
-      var people = {"A": movieSet, "B": movieSet};
-      var got = findMovies(people).toList();
-
-      expect(got, isEmpty);
-    });
+    updateMovies(processed, [movie1, movie2], WhyChosen.rating08);
+    processed.values.forEach(
+      (m) => expect(m.score, equals(WhyChosen.watchlist.index)));
   });
 }

@@ -16,50 +16,85 @@ class Movie {
 }
 
 
-Iterable<Set<String>> combinations(Iterable<String> iterable, r) sync* {
-  // Code ported from
-  // https://docs.python.org/3/library/itertools.html#itertools.combinations
-  final pool = new List.from(iterable);  // pool = tuple(iterable)
-  final n = pool.length;  // n = len(pool)
-  if (r > n) {  // if r > n:
-    return;  // return
-  }
-  var indices = new List.generate(r, (index) => index);  // indices = list(range(r))
-  final countDown = new List.from(indices.reversed);
-  yield new Set.from(indices.map((index) => pool[index]));  // yield tuple(pool[i] for i in indices)
-  while (true) {  // while True:
-    var ok = false;
-    var i;
-    for (i in countDown) {  // for i in reversed(range(r)):
-      if (indices[i] != i + n - r) {  // if indices[i] != i + n - r:
-        ok = true;
-        break;  // break
+/// Reasons why someone would want to watch a film.
+enum WhyChosen {
+  unused,  // Because Dart won't let you specify the starting index.
+  rating08,
+  rating09,
+  rating10,
+  watchlist
+}
+
+/// A movie that someone would like to watch.
+class ChosenMovie extends Movie implements Comparable {
+  int _score = 0;
+  int _numberOfReasons = 0;
+  final Map<WhyChosen, int> reasonCount = new Map();
+  DateTime lastWatched;
+
+  ChosenMovie(title, year, url): super(title, year, url);
+
+  ChosenMovie.fromMovie(Movie movie): super(movie.title, movie.year, movie.url);
+
+  int get score => _score;
+  int get numberOfReasons => _numberOfReasons;
+
+  int compareTo(ChosenMovie other) {
+    int order  = _score.compareTo(other.score);
+    if (order == 0) {
+      if (lastWatched != null) {
+        if (other.lastWatched == null) {
+          order = -1;
+        } else {
+          order = lastWatched.compareTo(other.lastWatched) * -1;
+        }
+      } else if (other.lastWatched != null) {
+        order = 1;
       }
     }
-    if (!ok) {
-      return;  // return
+
+    return order;
+  }
+
+  void addReason(WhyChosen reason) {
+    reasonCount[reason] = reasonCount.putIfAbsent(reason, () => 0) + 1;
+    _score += reason.index;
+    _numberOfReasons += 1;
+  }
+
+  void _reasonStringPart(WhyChosen reason, String name, List<String> parts) {
+    if (reasonCount.containsKey(reason)) {
+      parts.add("${name}: ${reasonCount[reason]}");
+    }
+  }
+
+  String reasonsString() {
+    var parts = [];
+    _reasonStringPart(WhyChosen.watchlist, "watchlist", parts);
+    _reasonStringPart(WhyChosen.rating10, "ten stars", parts);
+    _reasonStringPart(WhyChosen.rating09, "nine stars", parts);
+    _reasonStringPart(WhyChosen.rating08, "eight stars", parts);
+    if (lastWatched != null) {
+      var yearString = lastWatched.year.toString();
+      var monthString = lastWatched.month.toString().padLeft(2, "0");
+      var dayString = lastWatched.day.toString().padLeft(2, "0");
+      parts.add("last watched on " +
+                "${yearString}-${monthString}-${dayString}");
     }
 
-    indices[i] += 1;  // indices[i] += 1
-    for (var j = i + 1; j < r; j++) {  // for j in range(i+1, r):
-      indices[j] = indices[j-1] + 1; // indices[j] = indices[j-1] + 1
-    }
-    yield new Set.from(indices.map((i) => pool[i]));  // yield tuple(pool[i] for i in indices)
+    return parts.join(", ");
   }
 }
 
 
-Iterable<Movie> findMovies(Map<String, Set<Movie>> options) sync* {
-  final thisYear = new DateTime.now().year;
-  var usernames = new List.from(options.keys);
-  for (var i = usernames.length; i >= 2; i--) {
-    // Find all username combinations, from larget combinations to smallest
-    // (where "smallest" is two usernames).
-    for (var combo in combinations(usernames, i)) {
-      var movies = combo.map((username) => options[username]);
-      var matches = movies.reduce((x, y) => x.intersection(y));
-      yield* matches.where((m) => m.year <= thisYear);
-      options.values.forEach((s) => s.removeAll(matches));
-    }
+void updateMovies(Map<Movie, ChosenMovie> chosenMovies,
+  Iterable<Movie> newMovies, WhyChosen reason) {
+    // If sets allowed for a way to return the actual contained item then
+    // a map wouldn't be needed as a ChosenMovie inherits Movie's equality
+    // invariant.
+    newMovies.forEach((m) {
+      var chosenMovie = chosenMovies.putIfAbsent(m,
+        () => new ChosenMovie.fromMovie(m));
+      chosenMovie.addReason(reason);
+    });
   }
-}
