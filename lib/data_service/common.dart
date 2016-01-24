@@ -29,13 +29,8 @@ abstract class TraktService {
     "trakt-api-key": "3b1469ddbeaedc0b1f8dacd8035baea4fddff31fef7441e46e1c7a1c87fe9408"
   };
 
-  /// Abstract network request for a user's watchlist.
-  Future<String> fetchWatchlist(String username);
-
-  /// Abstract network request for a user's ratings.
-  Future<String> fetchRatings(String username);
-
-  Future<String> fetchLastWatched(String username);
+  /// Abstracted network request.
+  Future<String> fetch(String url);
 
   String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
                                           "users/${username}/watchlist/movies";
@@ -51,7 +46,7 @@ abstract class TraktService {
   }
 
   Future<Set<Movie>> watchlist(String username) async {
-    var responseText = await fetchWatchlist(username);
+    var responseText = await fetch(watchlistUrl(username));
     // TODO: check response succeeded, handle failures.
     var jsonData = JSON.decode(responseText);
     var movies = new Set<Movie>();
@@ -63,7 +58,7 @@ abstract class TraktService {
   }
 
   Future<Map<int, Set<Movie>>> ratings(String username) async {
-    var responseText = await fetchRatings(username);
+    var responseText = await fetch(ratingsUrl(username));
     // TODO: check if response succeeded.
     var jsonData = JSON.decode(responseText);
     var ratings = new Map<int, Set<Movie>>();
@@ -77,7 +72,7 @@ abstract class TraktService {
   }
 
   Future<Map<Movie, DateTime>> lastWatched(String username) async {
-    var responseText = await fetchLastWatched(username);
+    var responseText = await fetch(lastWatchedUrl(username));
     // TODO: check if response succeeded.
     var jsonData = JSON.decode(responseText);
     var lastWatchedMap = new Map<Movie, DateTime>();
