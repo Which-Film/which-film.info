@@ -5,13 +5,11 @@
  */
 library which_film.ui;
 
-import 'dart:async';
-
 import 'package:angular2/angular2.dart';
 
-import 'package:which-film/data_service/common.dart';
 import 'package:which-film/data_service/web.dart';
 import 'package:which-film/data_search.dart';
+import 'package:which-film/main.dart';
 
 
 @Component(selector: 'which-film')
@@ -32,35 +30,12 @@ class AppComponent {
   Iterable<Movie> movies = [];
 
   fetchMovies(List<String> users) {
-      var traktClient = new TraktWebService();
+      var client = new TraktWebService();
       users = users.where((username) => username.isNotEmpty).toList();
-      var movieFutures = users.map(traktClient.fetchData);
-      Future.wait(movieFutures)
-        .then((userDataIterable) {
-          var data = {};
-          for (UserData userData in userDataIterable) {
-            updateMovies(data, userData.watchlist, WhyChosen.watchlist);
-            updateMovies(data, userData.ratings[8], WhyChosen.rating08);
-            updateMovies(data, userData.ratings[9], WhyChosen.rating09);
-            updateMovies(data, userData.ratings[10], WhyChosen.rating10);
-            userData.lastWatched.forEach((m, d) {
-              if (data.containsKey(m)) {
-                var movie = data[m];
-                if (movie.lastWatched == null) {
-                  movie.lastWatched = d;
-                } else if (movie.lastWatched.isBefore(d)) {
-                    movie.lastWatched = d;
-                }
-              }
-            });
-          }
+      void process(Iterable<ChosenMovie> acceptableMovies) {
+        movies = acceptableMovies;
+      }
 
-          var thisYear = (new DateTime.now()).year;
-          var acceptableMovies = data.values.where(
-            (m) => m.numberOfReasons > 1 && m.year <= thisYear)
-            .toList();
-          acceptableMovies.sort((x, y) => x.compareTo(y) * -1);
-          movies = acceptableMovies;
-      });
-  }
+      driver(client, users, process);
+    }
 }
