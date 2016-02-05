@@ -3,7 +3,7 @@ library which_film.web_data_service;
 import "dart:async";
 import "dart:html";
 
-import "package:which-film/data_service/common.dart";
+import "package:which_film/data_service/common.dart";
 
 
 /// Implementation of [TraktService] for the web.

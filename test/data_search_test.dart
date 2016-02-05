@@ -1,7 +1,7 @@
 // pub run test test/data_search_test.dart
 
 import "package:test/test.dart";
-import "package:which-film/data_search.dart";
+import "package:which_film/data_search.dart";
 
 void main() {
   group("Movies", () {
