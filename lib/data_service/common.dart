@@ -3,7 +3,7 @@ library which_film.data_service;
 import "dart:async";
 import "dart:convert";
 
-import "package:which-film/data_search.dart";
+import "package:which_film/data_search.dart";
 
 
 class UserData {

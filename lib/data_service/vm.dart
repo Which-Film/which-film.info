@@ -4,7 +4,7 @@ import "dart:async";
 
 import "package:http/http.dart" as http;
 
-import "package:which-film/data_service/common.dart";
+import "package:which_film/data_service/common.dart";
 
 /// Implementation of [TraktService] for use with the Dart VM.
 class TraktVmService extends TraktService {

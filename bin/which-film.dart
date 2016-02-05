@@ -3,9 +3,9 @@
  */
 import "dart:io";
 
-import "package:which-film/data_search.dart";
-import "package:which-film/data_service/vm.dart";
-import "package:which-film/main.dart";
+import "package:which_film/data_search.dart";
+import "package:which_film/data_service/vm.dart";
+import "package:which_film/main.dart";
 
 
 void main(List<String> args) {

@@ -176,7 +176,7 @@ packages:
   test:
     description: test
     source: hosted
-    version: "0.12.5+1"
+    version: "0.12.6+2"
   typed_data:
     description: typed_data
     source: hosted
@@ -201,3 +201,4 @@ packages:
     description: yaml
     source: hosted
     version: "2.1.7"
+sdk: ">=1.12.0 <1.16.0"

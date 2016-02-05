@@ -7,9 +7,9 @@ library which_film.ui;
 
 import 'package:angular2/angular2.dart';
 
-import 'package:which-film/data_service/web.dart';
-import 'package:which-film/data_search.dart';
-import 'package:which-film/main.dart';
+import 'package:which_film/data_service/web.dart';
+import 'package:which_film/data_search.dart';
+import 'package:which_film/main.dart';
 
 
 @Component(selector: 'which-film')
