@@ -2,8 +2,8 @@ library which_film.main;
 
 import "dart:async";
 
-import "package:which-film/data_search.dart";
-import "package:which-film/data_service/common.dart";
+import "package:which_film/data_search.dart";
+import "package:which_film/data_service/common.dart";
 
 
 /// Common code for driving both the VM and web apps.
