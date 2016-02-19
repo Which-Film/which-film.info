@@ -81,10 +81,6 @@ packages:
     description: http_parser
     source: hosted
     version: "2.1.0"
-  initialize:
-    description: initialize
-    source: hosted
-    version: "0.6.2+1"
   intl:
     description: intl
     source: hosted
@@ -121,18 +117,6 @@ packages:
     description: plugin
     source: hosted
     version: "0.1.0"
-  polymer:
-    description: polymer
-    source: hosted
-    version: "0.16.4+1"
-  polymer_expressions:
-    description: polymer_expressions
-    source: hosted
-    version: "0.13.1"
-  polymer_interop:
-    description: polymer_interop
-    source: hosted
-    version: "0.1.2+1"
   pool:
     description: pool
     source: hosted
@@ -185,10 +169,6 @@ packages:
     description: string_scanner
     source: hosted
     version: "0.1.4+1"
-  template_binding:
-    description: template_binding
-    source: hosted
-    version: "0.14.0+3"
   test:
     description: test
     source: hosted
@@ -201,10 +181,6 @@ packages:
     description: watcher
     source: hosted
     version: "0.9.7"
-  web_components:
-    description: web_components
-    source: hosted
-    version: "0.12.2+2"
   when:
     description: when
     source: hosted
