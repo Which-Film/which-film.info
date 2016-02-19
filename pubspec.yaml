@@ -1,14 +1,15 @@
 name: which_film
 version: 0.0.1
 dependencies:
-  http: "^0.11.3+2"
-  test: ^0.12.5+1
-  angular2: 2.0.0-alpha.45
+  http: "^0.11.3+3"
+  test: ^0.12.10+2
+  angular2: "^2.0.0-beta.7"
   browser: ^0.10.0
   dart_to_js_script_rewriter: "^0.1.0+4"
 executables:
   which-film:
 transformers:
 - angular2:
+    platform_directives: 'package:angular2/common.dart#CORE_DIRECTIVES'
     entry_points: web/main.dart
 - dart_to_js_script_rewriter

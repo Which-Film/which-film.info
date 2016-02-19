@@ -12,20 +12,20 @@ import 'package:which_film/data_search.dart';
 import 'package:which_film/main.dart';
 
 
-@Component(selector: 'which-film')
-@View(
-    template: '''
+@Component(
+  selector: 'which-film',
+  template: '''
     <input #username1>
     <input #username2>
     <input #username3>
     <input #username4>
     <button (click)="fetchMovies([username1.value, username2.value, username3.value, username4.value])">Find movies</button>
     <ol>
-      <li *ng-for="#movie of movies">
+      <li *ngFor="#movie of movies">
         {{ movie }}
       </li>
     </ol>
-''', directives: const [NgFor])
+''')
 class AppComponent {
   Iterable<Movie> movies = [];
 
