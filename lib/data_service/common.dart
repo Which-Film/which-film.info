@@ -35,7 +35,7 @@ abstract class TraktService {
   String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
                                           "users/${username}/watchlist/movies";
   String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
-                                        "${username}/ratings/movies";
+                                        "${username}/ratings/movies/8,9,10";
   String lastWatchedUrl(String username) => "https://api-v2launch.trakt.tv/" +
                                             "users/${username}/watched/movies";
 
