@@ -10,13 +10,14 @@ http://contributor-covenant.org/.
 ### Manual testing
 If you are simply testing networking code, you can use
 `pub run -c bin/which-film.dart` and follow it with a list of Trakt
-usernames
-(e.g., `pub run -c bin/which-film.dart brettcannon kschmidt`).
+usernames (e.g.,
+`pub run -c bin/which-film.dart brettcannon kschmidt`).
 
 If you need to test the web UI, then use `pub serve` to start a local
-web server (make sure to use the non-test URL!). Then use a web
-browser where the same origin policy has been turned off, e.g.,
-`open -a "Google Chrome" --args "--disable-web-security"` on OS X.
+web server (make sure to use the non-test URL!).
+Then use a web browser where the same origin policy has been turned
+off, e.g., `open -a "Google Chrome" --args "--disable-web-security"`
+on OS X.
 
 ## Deployment
 Run `surge.sh`.
