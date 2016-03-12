@@ -1,8 +1,3 @@
-/**
- * To test locally:
- * > pub serve
- * > open -a "Google Chrome" --args "--disable-web-security"
- */
 library which_film.ui;
 
 import 'package:angular2/angular2.dart';
@@ -11,10 +6,9 @@ import 'package:which_film/data_service/web.dart';
 import 'package:which_film/data_search.dart';
 import 'package:which_film/main.dart';
 
-
 @Component(
-  selector: 'which-film',
-  template: '''
+    selector: 'which-film',
+    template: '''
     <input #username1>
     <input #username2>
     <input #username3>
@@ -30,12 +24,12 @@ class AppComponent {
   Iterable<Movie> movies = [];
 
   fetchMovies(List<String> users) {
-      var client = new TraktWebService();
-      users = users.where((username) => username.isNotEmpty).toList();
-      void process(Iterable<ChosenMovie> acceptableMovies) {
-        movies = acceptableMovies;
-      }
-
-      driver(client, users, process);
+    var client = new TraktWebService();
+    users = users.where((username) => username.isNotEmpty).toList();
+    void process(Iterable<ChosenMovie> acceptableMovies) {
+      movies = acceptableMovies;
     }
+
+    driver(client, users, process);
+  }
 }
