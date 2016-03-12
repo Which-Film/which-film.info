@@ -5,39 +5,41 @@ import "dart:convert";
 
 import "package:which_film/data_search.dart";
 
-
 class UserData {
+  String username;
   Set<Movie> watchlist;
   Map<int, Set<Movie>> ratings;
   Map<Movie, DateTime> lastWatched;
 
-  UserData(this.watchlist, this.ratings, this.lastWatched) {
-    // Guarantee that there is a set for every possible rating to avoid other
-    // code needing to check if a rating key exists.
-    for (var x = 1; x <= 10; x++) {
-      ratings.putIfAbsent(x, () => new Set());
+  UserData(this.username, this.watchlist, this.ratings, this.lastWatched) {
+    if (this.ratings != null) {
+      // Guarantee that there is a set for every possible rating to avoid other
+      // code needing to check if a rating key exists.
+      for (var x = 1; x <= 10; x++) {
+        ratings.putIfAbsent(x, () => new Set());
+      }
     }
   }
 }
-
 
 /// A data service for trakt.tv.
 abstract class TraktService {
   static final requestHeaders = {
     "Content-Type": "application/json",
     "trakt-api-version": "2",
-    "trakt-api-key": "3b1469ddbeaedc0b1f8dacd8035baea4fddff31fef7441e46e1c7a1c87fe9408"
+    "trakt-api-key":
+        "3b1469ddbeaedc0b1f8dacd8035baea4fddff31fef7441e46e1c7a1c87fe9408"
   };
 
   /// Abstracted network request.
   Future<String> fetch(String url);
 
-  String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
-                                          "users/${username}/watchlist/movies";
-  String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
-                                        "${username}/ratings/movies";
-  String lastWatchedUrl(String username) => "https://api-v2launch.trakt.tv/" +
-                                            "users/${username}/watched/movies";
+  String watchlistUrl(String username) =>
+      "https://api-v2launch.trakt.tv/" + "users/${username}/watchlist/movies";
+  String ratingsUrl(String username) =>
+      "https://api-v2launch.trakt.tv/users/" + "${username}/ratings/movies";
+  String lastWatchedUrl(String username) =>
+      "https://api-v2launch.trakt.tv/" + "users/${username}/watched/movies";
 
   Movie _makeMovie(Map jsonData) {
     var slug = jsonData["ids"]["slug"];
@@ -47,7 +49,9 @@ abstract class TraktService {
 
   Future<Set<Movie>> watchlist(String username) async {
     var responseText = await fetch(watchlistUrl(username));
-    // TODO: check response succeeded, handle failures.
+    if (responseText == null) {
+      return null;
+    }
     var jsonData = JSON.decode(responseText);
     var movies = new Set<Movie>();
     for (var watchlistData in jsonData) {
@@ -59,7 +63,9 @@ abstract class TraktService {
 
   Future<Map<int, Set<Movie>>> ratings(String username) async {
     var responseText = await fetch(ratingsUrl(username));
-    // TODO: check if response succeeded.
+    if (responseText == null) {
+      return null;
+    }
     var jsonData = JSON.decode(responseText);
     var ratings = new Map<int, Set<Movie>>();
     for (var ratingData in jsonData) {
@@ -73,7 +79,9 @@ abstract class TraktService {
 
   Future<Map<Movie, DateTime>> lastWatched(String username) async {
     var responseText = await fetch(lastWatchedUrl(username));
-    // TODO: check if response succeeded.
+    if (responseText == null) {
+      return null;
+    }
     var jsonData = JSON.decode(responseText);
     var lastWatchedMap = new Map<Movie, DateTime>();
     for (var lastWatchedData in jsonData) {
@@ -95,6 +103,6 @@ abstract class TraktService {
     var ratingsData = await ratings(username);
     var lastWatchedData = await lastWatched(username);
 
-    return new UserData(watchlistData, ratingsData, lastWatchedData);
+    return new UserData(username, watchlistData, ratingsData, lastWatchedData);
   }
 }
