@@ -1,8 +1,3 @@
-/**
- * To test locally:
- * > pub serve
- * > open -a "Google Chrome" --args "--disable-web-security"
- */
 library which_film.ui;
 
 import 'package:angular2/angular2.dart';
