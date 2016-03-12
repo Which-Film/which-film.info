@@ -2,6 +2,8 @@ library which_film.main;
 
 import "dart:async";
 
+import 'package:logging/logging.dart';
+
 import "package:which_film/data_search.dart";
 import "package:which_film/data_service/common.dart";
 
@@ -12,13 +14,11 @@ void driver(TraktService client, Iterable<String> usernames,
   Future.wait(futureUserData).then((userDataIterable) {
     var data = {};
     for (UserData userData in userDataIterable) {
-      if (userData.watchlist.isEmpty) {
-        print("WARNING: empty watchlist for ${userData.username}");
-        print('');
+      if (userData.watchlist == null) {
+        Logger.root.severe("empty watchlist for ${userData.username}");
         continue;
-      } else if (userData.ratings.isEmpty) {
-        print("WARNING: no ratings for ${userData.username}");
-        print('');
+      } else if (userData.ratings == null) {
+        Logger.root.severe("no ratings for ${userData.username}");
         continue;
       }
       updateMovies(data, userData.watchlist, WhyChosen.watchlist);

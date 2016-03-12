@@ -12,10 +12,12 @@ class UserData {
   Map<Movie, DateTime> lastWatched;
 
   UserData(this.username, this.watchlist, this.ratings, this.lastWatched) {
-    // Guarantee that there is a set for every possible rating to avoid other
-    // code needing to check if a rating key exists.
-    for (var x = 1; x <= 10; x++) {
-      ratings.putIfAbsent(x, () => new Set());
+    if (this.ratings != null) {
+      // Guarantee that there is a set for every possible rating to avoid other
+      // code needing to check if a rating key exists.
+      for (var x = 1; x <= 10; x++) {
+        ratings.putIfAbsent(x, () => new Set());
+      }
     }
   }
 }
@@ -48,7 +50,7 @@ abstract class TraktService {
   Future<Set<Movie>> watchlist(String username) async {
     var responseText = await fetch(watchlistUrl(username));
     if (responseText == null) {
-      return new Set();
+      return null;
     }
     var jsonData = JSON.decode(responseText);
     var movies = new Set<Movie>();
@@ -62,7 +64,7 @@ abstract class TraktService {
   Future<Map<int, Set<Movie>>> ratings(String username) async {
     var responseText = await fetch(ratingsUrl(username));
     if (responseText == null) {
-      return new Map();
+      return null;
     }
     var jsonData = JSON.decode(responseText);
     var ratings = new Map<int, Set<Movie>>();
@@ -78,7 +80,7 @@ abstract class TraktService {
   Future<Map<Movie, DateTime>> lastWatched(String username) async {
     var responseText = await fetch(lastWatchedUrl(username));
     if (responseText == null) {
-      return new Map();
+      return null;
     }
     var jsonData = JSON.decode(responseText);
     var lastWatchedMap = new Map<Movie, DateTime>();
@@ -101,6 +103,6 @@ abstract class TraktService {
     var ratingsData = await ratings(username);
     var lastWatchedData = await lastWatched(username);
 
-    return new UserData(watchlistData, ratingsData, lastWatchedData);
+    return new UserData(username, watchlistData, ratingsData, lastWatchedData);
   }
 }
