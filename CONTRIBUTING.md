@@ -21,3 +21,30 @@ on OS X.
 
 ## Deployment
 Run `surge.sh`.
+
+## Coding in Dart
+### Style enforcement
+The [`dart_style` tool](https://pub.dartlang.org/packages/dart_style)
+from the Dart team helps enforce style usage.
+
+### Editors
+#### Visual Studio Code
+There is a
+[third-party extension](https://marketplace.visualstudio.com/items?itemName=kevinplatel.dart),
+but it seemed buggy on last use (this was VS Code 0.10.10 w/
+0.0.6 of the plugin).
+
+#### Atom
+Use the [dartlang package](https://atom.io/packages/dartlang) which
+comes from the Dart team.
+
+#### Sublime Text
+There is a very good
+[third-party package](https://packagecontrol.io/packages/Dart)
+available through [Package Control](https://packagecontrol.io/). Do
+make sure to follow the
+[configuration instructions](https://github.com/guillermooo/dart-sublime-bundle/wiki/Installation%20and%20Basic%20Configuration)
+as they tell you how to set your package settings to point to the
+installation of the Dart SDK (**not** your personal settings and
+**not** the Dart binary).
+
