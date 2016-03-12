@@ -1,6 +1,3 @@
-/**
- * > pub run -c bin/which-film.dart brettcannon kschmidt
- */
 import "dart:io";
 
 import "package:which_film/data_search.dart";
