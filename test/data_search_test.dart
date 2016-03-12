@@ -101,13 +101,13 @@ void main() {
       expect(movie.reasonsString(), contains("watchlist"));
 
       movie.addReason(WhyChosen.rating10);
-      expect(movie.reasonsString(), contains("ten"));
+      expect(movie.reasonsString(), contains("10"));
 
       movie.addReason(WhyChosen.rating09);
-      expect(movie.reasonsString(), contains("nine"));
+      expect(movie.reasonsString(), contains("9"));
 
       movie.addReason(WhyChosen.rating08);
-      expect(movie.reasonsString(), contains("eight"));
+      expect(movie.reasonsString(), contains("8"));
 
       movie.lastWatched = new DateTime(2016, 1, 2);
       expect(movie.reasonsString(), contains("2016-01-02"));
