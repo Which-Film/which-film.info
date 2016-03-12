@@ -71,9 +71,9 @@ class ChosenMovie extends Movie implements Comparable {
   String reasonsString() {
     var parts = [];
     _reasonStringPart(WhyChosen.watchlist, "watchlist", parts);
-    _reasonStringPart(WhyChosen.rating10, "10× ★", parts);
-    _reasonStringPart(WhyChosen.rating09, "9× ★", parts);
-    _reasonStringPart(WhyChosen.rating08, "8× ★", parts);
+    _reasonStringPart(WhyChosen.rating10, "10★", parts);
+    _reasonStringPart(WhyChosen.rating09, "9★", parts);
+    _reasonStringPart(WhyChosen.rating08, "8★", parts);
     if (lastWatched != null) {
       var yearString = lastWatched.year.toString();
       var monthString = lastWatched.month.toString().padLeft(2, "0");
