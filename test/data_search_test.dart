@@ -15,8 +15,7 @@ void main() {
     });
 
     test("hashing", () {
-      var testSet = new Set()
-        ..add(movie1);
+      var testSet = new Set()..add(movie1);
 
       expect(testSet, contains(movie2));
       expect(testSet, isNot(contains(movie3)));
@@ -30,8 +29,7 @@ void main() {
       var chosenMovie = new ChosenMovie.fromMovie(plainMovie);
       expect(chosenMovie, equals(plainMovie));
 
-      var container = new Set()
-        ..add(chosenMovie);
+      var container = new Set()..add(chosenMovie);
       expect(container, contains(plainMovie));
     });
 
@@ -47,7 +45,7 @@ void main() {
 
       movie.addReason(WhyChosen.rating09);
       expect(movie.score,
-        equals(WhyChosen.rating08.index + WhyChosen.rating09.index));
+          equals(WhyChosen.rating08.index + WhyChosen.rating09.index));
       expect(movie.numberOfReasons, equals(2));
       expect(movie.reasonCount, hasLength(2));
       expect(movie.reasonCount[WhyChosen.rating08], equals(1));
@@ -82,7 +80,7 @@ void main() {
       watchedToday.lastWatched = new DateTime.now();
       var watchedYesterday = new ChosenMovie.fromMovie(watchedToday);
       watchedYesterday.lastWatched =
-        watchedToday.lastWatched.subtract(new Duration(days: 1));
+          watchedToday.lastWatched.subtract(new Duration(days: 1));
 
       expect(neverWatched.score, equals(watchedToday.score));
       expect(watchedToday.compareTo(neverWatched), equals(-1));
@@ -121,15 +119,15 @@ void main() {
     updateMovies(processed, [movie1, movie2], WhyChosen.rating10);
     expect(processed, contains(movie1));
     expect(processed, contains(movie2));
-    processed.values.forEach(
-      (v) => expect(v.score, equals(WhyChosen.rating10.index)));
+    processed.values
+        .forEach((v) => expect(v.score, equals(WhyChosen.rating10.index)));
 
     updateMovies(processed, [movie3], WhyChosen.watchlist);
     expect(processed, contains(movie3));
     expect(processed[movie3].score, equals(WhyChosen.watchlist.index));
 
     updateMovies(processed, [movie1, movie2], WhyChosen.rating08);
-    processed.values.forEach(
-      (m) => expect(m.score, equals(WhyChosen.watchlist.index)));
+    processed.values
+        .forEach((m) => expect(m.score, equals(WhyChosen.watchlist.index)));
   });
 }

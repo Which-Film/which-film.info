@@ -5,7 +5,6 @@ import "dart:convert";
 
 import "package:which_film/data_search.dart";
 
-
 class UserData {
   Set<Movie> watchlist;
   Map<int, Set<Movie>> ratings;
@@ -20,24 +19,24 @@ class UserData {
   }
 }
 
-
 /// A data service for trakt.tv.
 abstract class TraktService {
   static final requestHeaders = {
     "Content-Type": "application/json",
     "trakt-api-version": "2",
-    "trakt-api-key": "3b1469ddbeaedc0b1f8dacd8035baea4fddff31fef7441e46e1c7a1c87fe9408"
+    "trakt-api-key":
+        "3b1469ddbeaedc0b1f8dacd8035baea4fddff31fef7441e46e1c7a1c87fe9408"
   };
 
   /// Abstracted network request.
   Future<String> fetch(String url);
 
-  String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
-                                          "users/${username}/watchlist/movies";
-  String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
-                                        "${username}/ratings/movies";
-  String lastWatchedUrl(String username) => "https://api-v2launch.trakt.tv/" +
-                                            "users/${username}/watched/movies";
+  String watchlistUrl(String username) =>
+      "https://api-v2launch.trakt.tv/" + "users/${username}/watchlist/movies";
+  String ratingsUrl(String username) =>
+      "https://api-v2launch.trakt.tv/users/" + "${username}/ratings/movies";
+  String lastWatchedUrl(String username) =>
+      "https://api-v2launch.trakt.tv/" + "users/${username}/watched/movies";
 
   Movie _makeMovie(Map jsonData) {
     var slug = jsonData["ids"]["slug"];

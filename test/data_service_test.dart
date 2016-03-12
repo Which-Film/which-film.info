@@ -7,12 +7,12 @@ void main() {
   var client = new TraktVmService();
   tearDownAll(client.close);
   group("UserData", () {
-      test("all possible ratings have a set to begin with", () {
-        var userData = new UserData(new Set(), new Map(), new Map());
-        for (var x = 1; x <= 10; x++) {
-          expect(userData.ratings, contains(x));
-        }
-      });
+    test("all possible ratings have a set to begin with", () {
+      var userData = new UserData(new Set(), new Map(), new Map());
+      for (var x = 1; x <= 10; x++) {
+        expect(userData.ratings, contains(x));
+      }
+    });
   });
 
   group("Trakt VM data service", () {
