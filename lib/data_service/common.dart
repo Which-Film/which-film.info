@@ -34,12 +34,12 @@ abstract class TraktService {
   /// Abstracted network request.
   Future<String> fetch(String url);
 
-  String watchlistUrl(String username) =>
-      "https://api-v2launch.trakt.tv/" + "users/${username}/watchlist/movies";
-  String ratingsUrl(String username) =>
-      "https://api-v2launch.trakt.tv/users/" + "${username}/ratings/movies";
-  String lastWatchedUrl(String username) =>
-      "https://api-v2launch.trakt.tv/" + "users/${username}/watched/movies";
+  String watchlistUrl(String username) => "https://api-v2launch.trakt.tv/" +
+                                          "users/${username}/watchlist/movies";
+  String ratingsUrl(String username) => "https://api-v2launch.trakt.tv/users/" +
+                                        "${username}/ratings/movies/8,9,10";
+  String lastWatchedUrl(String username) => "https://api-v2launch.trakt.tv/" +
+                                            "users/${username}/watched/movies";
 
   Movie _makeMovie(Map jsonData) {
     var slug = jsonData["ids"]["slug"];
