@@ -17,7 +17,9 @@ class TraktVmService extends TraktService {
   @override
   Future<String> fetch(String url) async {
     var response = await _client.get(url, headers: TraktService.requestHeaders);
-    // TODO: check for error cases.
+    if (response.statusCode >= 300) {
+      return null;
+    }
     return response.body;
   }
 }
