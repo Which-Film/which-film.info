@@ -15,10 +15,9 @@ class Movie {
   int get hashCode => toString().hashCode;
 }
 
-
 /// Reasons why someone would want to watch a film.
 enum WhyChosen {
-  unused,  // Because Dart won't let you specify the starting index.
+  unused, // Because Dart won't let you specify the starting index.
   rating08,
   rating09,
   rating10,
@@ -32,15 +31,16 @@ class ChosenMovie extends Movie implements Comparable {
   final Map<WhyChosen, int> reasonCount = new Map();
   DateTime lastWatched;
 
-  ChosenMovie(title, year, url): super(title, year, url);
+  ChosenMovie(title, year, url) : super(title, year, url);
 
-  ChosenMovie.fromMovie(Movie movie): super(movie.title, movie.year, movie.url);
+  ChosenMovie.fromMovie(Movie movie)
+      : super(movie.title, movie.year, movie.url);
 
   int get score => _score;
   int get numberOfReasons => _numberOfReasons;
 
   int compareTo(ChosenMovie other) {
-    int order  = _score.compareTo(other.score);
+    int order = _score.compareTo(other.score);
     if (order == 0) {
       if (lastWatched != null) {
         if (other.lastWatched == null) {
@@ -78,23 +78,22 @@ class ChosenMovie extends Movie implements Comparable {
       var yearString = lastWatched.year.toString();
       var monthString = lastWatched.month.toString().padLeft(2, "0");
       var dayString = lastWatched.day.toString().padLeft(2, "0");
-      parts.add("last watched on " +
-                "${yearString}-${monthString}-${dayString}");
+      parts.add(
+          "last watched on " + "${yearString}-${monthString}-${dayString}");
     }
 
     return parts.join(", ");
   }
 }
 
-
 void updateMovies(Map<Movie, ChosenMovie> chosenMovies,
-  Iterable<Movie> newMovies, WhyChosen reason) {
-    // If sets allowed for a way to return the actual contained item then
-    // a map wouldn't be needed as a ChosenMovie inherits Movie's equality
-    // invariant.
-    newMovies.forEach((m) {
-      var chosenMovie = chosenMovies.putIfAbsent(m,
-        () => new ChosenMovie.fromMovie(m));
-      chosenMovie.addReason(reason);
-    });
-  }
+    Iterable<Movie> newMovies, WhyChosen reason) {
+  // If sets allowed for a way to return the actual contained item then
+  // a map wouldn't be needed as a ChosenMovie inherits Movie's equality
+  // invariant.
+  newMovies.forEach((m) {
+    var chosenMovie =
+        chosenMovies.putIfAbsent(m, () => new ChosenMovie.fromMovie(m));
+    chosenMovie.addReason(reason);
+  });
+}
