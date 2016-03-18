@@ -9,6 +9,12 @@ packages:
     description: angular2
     source: hosted
     version: "2.0.0-beta.7"
+  ansicolor:
+    description:
+      name: ansicolor
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.9"
   args:
     description: args
     source: hosted
@@ -65,6 +71,12 @@ packages:
     description: glob
     source: hosted
     version: "1.1.0"
+  grinder:
+    description:
+      name: grinder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.0+2"
   html:
     description: html
     source: hosted
@@ -97,6 +109,12 @@ packages:
     description: mime
     source: hosted
     version: "0.9.3"
+  mockable_filesystem:
+    description:
+      name: mockable_filesystem
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   observe:
     description: observe
     source: hosted
@@ -169,10 +187,22 @@ packages:
     description: string_scanner
     source: hosted
     version: "0.1.4+1"
+  supports_color:
+    description:
+      name: supports_color
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   test:
     description: test
     source: hosted
     version: "0.12.10+2"
+  unscripted:
+    description:
+      name: unscripted
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.2"
   utf:
     description: utf
     source: hosted
