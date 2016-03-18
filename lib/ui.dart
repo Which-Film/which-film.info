@@ -7,8 +7,8 @@ import 'package:which_film/data_search.dart';
 import 'package:which_film/main.dart';
 
 @Component(
-  selector: 'which-film',
-  template: '''
+    selector: 'which-film',
+    template: '''
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col">
         <div class="mdl-textfield mdl-js-textfield">
