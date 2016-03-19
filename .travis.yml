@@ -1,3 +1,4 @@
 language: dart
 sudo: false
-script: tool/travis.sh
+before_script: pub global activate grinder
+script: grind ci
