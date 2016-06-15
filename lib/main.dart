@@ -10,6 +10,11 @@ import "package:which_film/data_service/common.dart";
 /// Common code for driving both the VM and web apps.
 void driver(TraktService client, Iterable<String> usernames,
     void process(Iterable<ChosenMovie> movies)) {
+  Logger.root.level = Level.INFO;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    print('${rec.level.name}: ${rec.message}');
+  });
+
   var futureUserData = usernames.map(client.fetchData);
   Future.wait(futureUserData).then((userDataIterable) {
     var data = {};
