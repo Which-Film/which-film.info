@@ -17,14 +17,19 @@ import 'package:which_film/main.dart';
         </div>
         <button
               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-              (click)="addUser(username)">
-            Find movies
+              (click)="addUser(username.value); username.value='' ">
+            Add user
         </button>
         <ul class="mdl-list">
           <li *ngFor="#user of users" class="mdl-list__item">
             <span class="mdl-list__item-primary-content">
             {{ user }}
             </span>
+            <button
+                class="mdl-button mdl-js-button mdl-button--icon"
+                (click)="removeUser(user)">
+              <i class="material-icons">remove</i>
+            </button>
           </li>
         </ul>
       </div>
@@ -52,10 +57,14 @@ class AppComponent {
   }
 
   addUser(userName) {
-    users = []..addAll(users)..add(userName.value);
-    userName.value = "";
+    users = []..addAll(users)..add(userName);
     if( users.length > 1 ) {
       fetchMovies(users);
     }
+  }
+
+  removeUser(userName) {
+    users = users.where((f) => f != userName);
+    users.length > 1 ? fetchMovies(users) : movies = [];
   }
 }
