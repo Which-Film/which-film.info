@@ -12,42 +12,28 @@ import 'package:which_film/main.dart';
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col">
         <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" #username1 id="username1">
-          <label class="mdl-textfield__label" for="username1">Trakt.tv username</label>
+          <input class="mdl-textfield__input" type="text" #username id="username">
+          <label class="mdl-textfield__label" for="username">Trakt.tv username</label>
         </div>
-      </div>
-      <div class="mdl-cell mdl-cell--3-col">
-        <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" #username2 id="username2">
-          <label class="mdl-textfield__label" for="username2">Another username</label>
-        </div>
-      </div>
-      <div class="mdl-cell mdl-cell--3-col">
-        <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" #username3 id="username3">
-          <label class="mdl-textfield__label" for="username3">Another (optional) username</label>
-        </div>
-      </div>
-      <div class="mdl-cell mdl-cell--3-col">
-        <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" #username4 id="username4">
-          <label class="mdl-textfield__label" for="username4">Yet another (optional) username</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="mdl-grid">
-      <div class="mdl-cell mdl-call--12-col">
         <button
               class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-              (click)="fetchMovies([username1.value, username2.value, username3.value, username4.value])">
-            Find movies
+              (click)="addUser(username.value); username.value='' ">
+            Add user
         </button>
+        <ul class="mdl-list">
+          <li *ngFor="#user of users" class="mdl-list__item">
+            <span class="mdl-list__item-primary-content">
+            {{ user }}
+            </span>
+            <button
+                class="mdl-button mdl-js-button mdl-button--icon"
+                (click)="removeUser(user)">
+              <i class="material-icons">remove</i>
+            </button>
+          </li>
+        </ul>
       </div>
-    </div>
-
-    <div class="mdl-grid">
-      <div class="mdl-cell mdl-call--12-col">
+      <div class="mdl-cell mdl-cell--9-col">
         <ol>
           <li *ngFor="#movie of movies">
             {{ movie }}
@@ -58,6 +44,7 @@ import 'package:which_film/main.dart';
 ''')
 class AppComponent {
   Iterable<Movie> movies = [];
+  Iterable<String> users = [];
 
   fetchMovies(List<String> users) {
     var client = new TraktWebService();
@@ -67,5 +54,19 @@ class AppComponent {
     }
 
     driver(client, users, process);
+  }
+
+  addUser(userName) {
+    var userList = users.toList();
+    userList.add(userName);
+    users = userList;
+    if (users.length > 1) {
+      fetchMovies(users);
+    }
+  }
+
+  removeUser(userName) {
+    users = users.where((f) => f != userName);
+    users.length > 1 ? fetchMovies(users) : movies = [];
   }
 }
