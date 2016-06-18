@@ -33,7 +33,7 @@ import 'package:which_film/main.dart';
           </li>
         </ul>
       </div>
-      <div class="mdl-cell mdl-cell--3-col">
+      <div class="mdl-cell mdl-cell--9-col">
         <ol>
           <li *ngFor="#movie of movies">
             {{ movie }}
@@ -57,8 +57,10 @@ class AppComponent {
   }
 
   addUser(userName) {
-    users = []..addAll(users)..add(userName);
-    if( users.length > 1 ) {
+    var userList = users.toList();
+    userList.add(userName);
+    users = userList;
+    if (users.length > 1) {
       fetchMovies(users);
     }
   }
