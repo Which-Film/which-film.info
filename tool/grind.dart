@@ -49,7 +49,10 @@ deploy() {
 @Depends(build)
 browser() {
   try {
-    run('hash', arguments: ['dartium']);
+    run('dartium', arguments: [
+      webDir.absolute.path + '/index.html',
+      '--disable-web-security'
+    ]);
   } catch (processException) {
     runAsync('pub', arguments: ['serve']);
     run('open', arguments: [
