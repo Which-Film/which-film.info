@@ -43,23 +43,21 @@ import 'package:which_film/main.dart';
     </div>
 ''')
 class AppComponent {
-  Iterable<Movie> movies = [];
-  Iterable<String> users = [];
+  List<Movie> movies = [];
+  List<String> users = [];
 
   fetchMovies(List<String> users) {
     var client = new TraktWebService();
     users = users.where((username) => username.isNotEmpty).toList();
     void process(Iterable<ChosenMovie> acceptableMovies) {
-      movies = acceptableMovies;
+      movies = acceptableMovies.toList();
     }
 
     driver(client, users, process);
   }
 
   addUser(userName) {
-    var userList = users.toList();
-    userList.add(userName);
-    users = userList;
+    users.add(userName);
     if (users.length > 1) {
       fetchMovies(users);
     }
