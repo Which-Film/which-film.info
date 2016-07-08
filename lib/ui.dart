@@ -2,9 +2,10 @@ library which_film.ui;
 
 import 'package:angular2/angular2.dart';
 
+import 'package:which_film/data_service/common.dart';
 import 'package:which_film/data_service/web.dart';
 import 'package:which_film/data_search.dart';
-import 'package:which_film/main.dart';
+import 'package:which_film/processing.dart';
 
 @Component(
     selector: 'which-film',
@@ -43,28 +44,28 @@ import 'package:which_film/main.dart';
     </div>
 ''')
 class AppComponent {
+  TraktService _client = new TraktWebService();
+  Set<UserData> data = new Set();
   List<Movie> movies = [];
   List<String> users = [];
 
-  fetchMovies(List<String> users) {
-    var client = new TraktWebService();
-    users = users.where((username) => username.isNotEmpty).toList();
-    void process(Iterable<ChosenMovie> acceptableMovies) {
-      movies = acceptableMovies.toList();
-    }
-
-    driver(client, users, process);
-  }
-
   addUser(userName) {
     users.add(userName);
-    if (users.length > 1) {
-      fetchMovies(users);
-    }
+    _client.fetchData(userName).then((userData) {
+      data.add(userData);
+      if (users.length > 1) {
+        movies = processMovies(data).toList();
+      }
+    });
   }
 
   removeUser(userName) {
     users = users.where((f) => f != userName);
-    users.length > 1 ? fetchMovies(users) : movies = [];
+    data.removeWhere((x) => x.username == userName);
+    if (users.length < 1) {
+      movies = [];
+    } else {
+      movies = processMovies(data).toList();
+    }
   }
 }
