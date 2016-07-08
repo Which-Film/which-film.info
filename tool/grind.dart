@@ -46,7 +46,6 @@ deploy() {
 }
 
 @Task('Run in browser.')
-@Depends(build)
 browser() {
   try {
     run('dartium', arguments: [
@@ -55,13 +54,11 @@ browser() {
     ]);
   } catch (processException) {
     runAsync('pub', arguments: ['serve']);
-    run('open', arguments: [
-      '-a',
-      'Google Chrome',
-      '--args',
-      'http://localhost:8080',
-      '--disable-web-security',
-      '--user-data-dir'
-    ]);
+    runAsync('/Applications/Google Chrome.app/Contents/MacOS/Google\ Chrome',
+        arguments: [
+          'http://localhost:8080',
+          '--disable-web-security',
+          '--user-data-dir',
+        ]);
   }
 }

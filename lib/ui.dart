@@ -2,9 +2,10 @@ library which_film.ui;
 
 import 'package:angular2/angular2.dart';
 
+import 'package:which_film/data_service/common.dart';
 import 'package:which_film/data_service/web.dart';
 import 'package:which_film/data_search.dart';
-import 'package:which_film/main.dart';
+import 'package:which_film/processing.dart';
 
 @Component(
     selector: 'which-film',
@@ -43,30 +44,28 @@ import 'package:which_film/main.dart';
     </div>
 ''')
 class AppComponent {
-  Iterable<Movie> movies = [];
-  Iterable<String> users = [];
-
-  fetchMovies(List<String> users) {
-    var client = new TraktWebService();
-    users = users.where((username) => username.isNotEmpty).toList();
-    void process(Iterable<ChosenMovie> acceptableMovies) {
-      movies = acceptableMovies;
-    }
-
-    driver(client, users, process);
-  }
+  TraktService _client = new TraktWebService();
+  Set<UserData> data = new Set();
+  List<Movie> movies = [];
+  List<String> users = [];
 
   addUser(userName) {
-    var userList = users.toList();
-    userList.add(userName);
-    users = userList;
-    if (users.length > 1) {
-      fetchMovies(users);
-    }
+    users.add(userName);
+    _client.fetchData(userName).then((userData) {
+      data.add(userData);
+      if (users.length > 1) {
+        movies = processMovies(data);
+      }
+    });
   }
 
   removeUser(userName) {
     users = users.where((f) => f != userName);
-    users.length > 1 ? fetchMovies(users) : movies = [];
+    data.removeWhere((x) => x.username == userName);
+    if (users.length < 1) {
+      movies = [];
+    } else {
+      movies = processMovies(data);
+    }
   }
 }
