@@ -47,13 +47,13 @@ deploy() {
 
 @Task('Run in browser.')
 browser() {
-  runAsync('pub', arguments: ['serve']);
   try {
     run('dartium', arguments: [
       webDir.absolute.path + '/index.html',
       '--disable-web-security'
     ]);
   } catch (processException) {
+    runAsync('pub', arguments: ['serve']);
     runAsync('/Applications/Google Chrome.app/Contents/MacOS/Google\ Chrome',
         arguments: [
           'http://localhost:8080',
