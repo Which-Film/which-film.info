@@ -54,7 +54,7 @@ class AppComponent {
     _client.fetchData(userName).then((userData) {
       data.add(userData);
       if (users.length > 1) {
-        movies = processMovies(data).toList();
+        movies = processMovies(data);
       }
     });
   }
@@ -65,7 +65,7 @@ class AppComponent {
     if (users.length < 1) {
       movies = [];
     } else {
-      movies = processMovies(data).toList();
+      movies = processMovies(data);
     }
   }
 }

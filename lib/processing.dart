@@ -6,7 +6,7 @@ import "package:which_film/data_search.dart";
 import "package:which_film/data_service/common.dart";
 
 /// Common code for driving both the VM and web apps.
-void processMovies(Iterable<UserData> userDataIterable) {
+List<Movie> processMovies(Iterable<UserData> userDataIterable) {
   Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.message}');
@@ -42,5 +42,5 @@ void processMovies(Iterable<UserData> userDataIterable) {
       .where((m) => m.numberOfReasons > 1 && m.year <= thisYear)
       .toList();
   acceptableMovies.sort((x, y) => x.compareTo(y) * -1);
-  return acceptableMovies;
+  return acceptableMovies.toList();
 }
