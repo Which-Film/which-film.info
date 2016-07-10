@@ -25,7 +25,7 @@ import 'package:which_film/processing.dart';
         </button>
         <ul class="mdl-list">
           <li *ngFor="#user of users" class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
+            <span class="mdl-list__item-primary-content" [style.color]="getLoadingStateColor(user)">
             {{ user }}
             </span>
             <button
@@ -75,6 +75,17 @@ class AppComponent {
     if (event.keyCode == 13) {
       addUser(userName.value);
       userName.value = '';
+    }
+  }
+
+  String getLoadingStateColor(user) {
+    Iterable<UserData> userDataResult = data.where((x) => x.username == user);
+    if (userDataResult.isEmpty) {
+      return 'grey';
+    } else if (userDataResult.first.watchlist == null) {
+      return 'red';
+    } else {
+      return 'black';
     }
   }
 }

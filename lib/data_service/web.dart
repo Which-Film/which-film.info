@@ -9,9 +9,13 @@ import "package:which_film/data_service/common.dart";
 class TraktWebService extends TraktService {
   @override
   Future<String> fetch(String url) async {
-    var response = await HttpRequest.request(url,
-        requestHeaders: TraktService.requestHeaders);
+    try {
+      var response = await HttpRequest.request(url,
+          requestHeaders: TraktService.requestHeaders);
     // TODO: check for errors.
-    return response.responseText;
+      return response.responseText;
+    } catch(exception) {
+      return null;
+    }
   }
 }
