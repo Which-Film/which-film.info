@@ -2,11 +2,22 @@ import 'package:grinder/grinder.dart';
 
 import 'dart:io';
 
+String chromePath =
+    '/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome';
+
 main(args) => grind(args);
 
 @Task('Run tests.')
 test() {
   new PubApp.local('test').run([]);
+}
+
+@Task('Run tests under Observatory.')
+observe_tests() {
+  var port = 8181; // The default port, but specifying just to be safe.
+  Dart.runAsync(getFile('test/all.dart').path,
+      vmArgs: ['--checked', '--observe=${port}']);
+  runAsync(chromePath, arguments: ['http://localhost:${port}']);
 }
 
 @Task('Analyze code.')
@@ -53,12 +64,12 @@ browser() {
       '--disable-web-security'
     ]);
   } catch (processException) {
-    runAsync('pub', arguments: ['serve']);
-    runAsync('/Applications/Google Chrome.app/Contents/MacOS/Google\ Chrome',
-        arguments: [
-          'http://localhost:8080',
-          '--disable-web-security',
-          '--user-data-dir',
-        ]);
+    var port = 8080;
+    runAsync('pub', arguments: ['serve', '--port=${port}']);
+    runAsync(chromePath, arguments: [
+      'http://localhost:${port}',
+      '--disable-web-security',
+      '--user-data-dir',
+    ]);
   }
 }
