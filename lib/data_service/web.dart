@@ -12,9 +12,9 @@ class TraktWebService extends TraktService {
     try {
       var response = await HttpRequest.request(url,
           requestHeaders: TraktService.requestHeaders);
-    // TODO: check for errors.
+      // TODO: check for errors.
       return response.responseText;
-    } catch(exception) {
+    } catch (exception) {
       return null;
     }
   }
