@@ -60,7 +60,7 @@ class AppComponent {
   }
 
   removeUser(userName) {
-    users = users.where((f) => f != userName);
+    users = users.where((f) => f != userName).toList();
     data.removeWhere((x) => x.username == userName);
     if (users.length < 1) {
       movies = [];
