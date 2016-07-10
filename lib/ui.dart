@@ -13,7 +13,9 @@ import 'package:which_film/processing.dart';
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col">
         <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" #username id="username">
+          <input
+                class="mdl-textfield__input" type="text" #username id="username"
+                (keypress)="handleUsernameInput(\$event, username);">
           <label class="mdl-textfield__label" for="username">Trakt.tv username</label>
         </div>
         <button
@@ -66,6 +68,13 @@ class AppComponent {
       movies = [];
     } else {
       movies = processMovies(data);
+    }
+  }
+
+  handleUsernameInput(event, userName) {
+    if (event.keyCode == 13) {
+      addUser(userName.value);
+      userName.value = '';
     }
   }
 }
