@@ -6,7 +6,7 @@ import "package:which_film/data_search.dart";
 import "package:which_film/data_service/common.dart";
 
 /// Common code for driving both the VM and web apps.
-List<Movie> processMovies(Iterable<UserData> userDataIterable) {
+List<ChosenMovie> processMovies(Iterable<UserData> userDataIterable) {
   Logger.root.level = Level.INFO;
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name}: ${rec.message}');
