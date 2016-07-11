@@ -19,6 +19,21 @@ Then use a web browser where the same origin policy has been turned
 off, e.g., `open -a "Google Chrome" --args "--disable-web-security"`
 on OS X.
 
+### Code coverage
+If you run the test suite under
+[Observatory](https://dart-lang.github.io/observatory/), you can get
+code coverage: `grind observe_tests`. This will launch Chrome
+with the Observatory page open. You will find a link called
+`all.dart$main`. If you click on it you will see at the bottom of the
+next page the source code for `test/all.dart`. You can then click
+through the import lines to look at the source code of the various
+Dart source files that were executed. This view of the source code
+includes colour-coded line numbers denoting code coverage.
+
+When you're done viewing using Observatory, just Ctrl-C the test
+process/isolate.
+
+
 ## Deployment
 Run `surge.sh`.
 
@@ -30,9 +45,7 @@ from the Dart team helps enforce style usage.
 ### Editors
 #### Visual Studio Code
 There is a
-[third-party extension](https://marketplace.visualstudio.com/items?itemName=kevinplatel.dart),
-but it seemed buggy on last use (this was VS Code 0.10.10 w/
-0.0.6 of the plugin).
+[Dart extension](https://marketplace.visualstudio.com/items?itemName=kevinplatel.dart).
 
 #### Atom
 Use the [dartlang package](https://atom.io/packages/dartlang) which
