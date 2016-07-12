@@ -13,7 +13,9 @@ import 'package:which_film/processing.dart';
     <div class="mdl-grid">
       <div class="mdl-cell mdl-cell--3-col">
         <div class="mdl-textfield mdl-js-textfield">
-          <input class="mdl-textfield__input" type="text" #username id="username">
+          <input
+                class="mdl-textfield__input" type="text" #username id="username"
+                (keypress)="handleUsernameInput(\$event, username);">
           <label class="mdl-textfield__label" for="username">Trakt.tv username</label>
         </div>
         <button
@@ -23,7 +25,7 @@ import 'package:which_film/processing.dart';
         </button>
         <ul class="mdl-list">
           <li *ngFor="#user of users" class="mdl-list__item">
-            <span class="mdl-list__item-primary-content">
+            <span class="mdl-list__item-primary-content" [style.color]="getLoadingStateColor(user)">
             {{ user }}
             </span>
             <button
@@ -60,12 +62,30 @@ class AppComponent {
   }
 
   removeUser(userName) {
-    users = users.where((f) => f != userName);
+    users = users.where((f) => f != userName).toList();
     data.removeWhere((x) => x.username == userName);
     if (users.length < 1) {
       movies = [];
     } else {
       movies = processMovies(data);
+    }
+  }
+
+  handleUsernameInput(event, userName) {
+    if (event.keyCode == 13) {
+      addUser(userName.value);
+      userName.value = '';
+    }
+  }
+
+  String getLoadingStateColor(user) {
+    Iterable<UserData> userDataResult = data.where((x) => x.username == user);
+    if (userDataResult.isEmpty) {
+      return 'grey';
+    } else if (userDataResult.first.watchlist == null) {
+      return 'red';
+    } else {
+      return 'black';
     }
   }
 }
