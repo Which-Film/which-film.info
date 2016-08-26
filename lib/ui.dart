@@ -15,7 +15,7 @@ import 'package:which_film/processing.dart';
         <div class="mdl-textfield mdl-js-textfield">
           <input
                 class="mdl-textfield__input" type="text" #username id="username"
-                (keypress)="handleUsernameInput(\$event, username);">
+                (keypress)="handleUsernameInput(\$event, username);" autofocus>
           <label class="mdl-textfield__label" for="username">Trakt.tv username</label>
         </div>
         <button
