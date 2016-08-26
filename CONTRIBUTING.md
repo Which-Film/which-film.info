@@ -5,19 +5,10 @@ http://contributor-covenant.org/.
 
 ## Testing
 ### Unit tests
-`pub run test` (you can specify individual test files if you want).
+`grind test`.
 
-### Manual testing
-If you are simply testing networking code, you can use
-`pub run -c bin/which-film.dart` and follow it with a list of Trakt
-usernames (e.g.,
-`pub run -c bin/which-film.dart brettcannon kschmidt`).
-
-If you need to test the web UI, then use `pub serve` to start a local
-web server (make sure to use the non-test URL!).
-Then use a web browser where the same origin policy has been turned
-off, e.g., `open -a "Google Chrome" --args "--disable-web-security"`
-on OS X.
+### In-browser, manual testing
+`grind browser`.
 
 ### Code coverage
 If you run the test suite under
@@ -35,12 +26,14 @@ process/isolate.
 
 
 ## Deployment
-Run `surge.sh`.
+Run `grind deploy`.
 
 ## Coding in Dart
 ### Style enforcement
-The [`dart_style` tool](https://pub.dartlang.org/packages/dart_style)
-from the Dart team helps enforce style usage.
+`grind format`.
+
+### Static analysis
+`grind analyze`.
 
 ### Editors
 #### Visual Studio Code
