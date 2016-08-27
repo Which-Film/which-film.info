@@ -24,7 +24,7 @@ import 'package:which_film/processing.dart';
             Add user
         </button>
         <ul class="mdl-list">
-          <li *ngFor="#user of users" class="mdl-list__item">
+          <li *ngFor="let user of users" class="mdl-list__item">
             <span class="mdl-list__item-primary-content" [style.color]="getLoadingStateColor(user)">
             {{ user }}
             </span>
@@ -38,7 +38,7 @@ import 'package:which_film/processing.dart';
       </div>
       <div class="mdl-cell mdl-cell--9-col">
         <ol>
-          <li *ngFor="#movie of movies">
+          <li *ngFor="let movie of movies">
             {{ movie }}
           </li>
         </ol>
