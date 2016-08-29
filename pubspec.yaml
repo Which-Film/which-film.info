@@ -6,11 +6,10 @@ dependencies:
   angular2:
   browser:
   dart_to_js_script_rewriter:
+  usage:
 dev_dependencies:
   grinder:
   test:
-executables:
-  which-film:
 transformers:
 - angular2:
     platform_directives:

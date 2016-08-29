@@ -1,6 +1,9 @@
 library which_film.ui;
 
+import "dart:async";
+
 import 'package:angular2/angular2.dart';
+import 'package:usage/usage.dart';
 
 import 'package:which_film/data_service/common.dart';
 import 'package:which_film/data_service/web.dart';
@@ -15,7 +18,7 @@ import 'package:which_film/processing.dart';
         <div class="mdl-textfield mdl-js-textfield">
           <input
                 class="mdl-textfield__input" type="text" #username id="username"
-                (keypress)="handleUsernameInput(\$event, username);">
+                (keypress)="handleUsernameInput(\$event, username);" autofocus>
           <label class="mdl-textfield__label" for="username">Trakt.tv username</label>
         </div>
         <button
@@ -50,9 +53,27 @@ class AppComponent {
   Set<UserData> data = new Set();
   List<Movie> movies = [];
   List<String> users = [];
+  Analytics ga;
+
+  AppComponent() {
+    analytics().then((ga) => ga.sendScreenView('home'));
+  }
+
+  Future<Analytics> analytics() async {
+    bool isChecked = false;
+    assert((isChecked = true));
+    if (ga == null && !isChecked) {
+      ga = await Analytics.create('UA-303429-25', 'which-film', '0.1');
+    } else {
+      ga = new AnalyticsMock();
+    }
+
+    return ga;
+  }
 
   addUser(userName) {
     users.add(userName);
+    analytics().then((ga) => ga.sendEvent('Username', 'add'));
     _client.fetchData(userName).then((userData) {
       data.add(userData);
       if (users.length > 1) {
@@ -64,6 +85,7 @@ class AppComponent {
   removeUser(userName) {
     users = users.where((f) => f != userName).toList();
     data.removeWhere((x) => x.username == userName);
+    analytics().then((ga) => ga.sendEvent('Username', 'remove'));
     if (users.length < 1) {
       movies = [];
     } else {
