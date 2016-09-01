@@ -3,6 +3,11 @@
 This project follows the latest code of conduct found at
 http://contributor-covenant.org/.
 
+## Proposing changes
+Please open an issue for discussing any UX changes prior to sending a
+pull request. This allows for proper discussion before any coding work
+begins in case the idea is ultimately rejected.
+
 ## Testing
 ### Unit tests
 `grind test`.
