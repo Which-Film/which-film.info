@@ -40,11 +40,24 @@ import 'package:which_film/processing.dart';
         </ul>
       </div>
       <div class="mdl-cell mdl-cell--9-col">
-        <ol>
-          <li *ngFor="let movie of movies">
-            {{ movie }}
-          </li>
-        </ol>
+        <span [ngSwitch]="users.length">
+          <span *ngSwitchWhen="0"><p>Please add at least 2 usernames.</span>
+          <span *ngSwitchWhen="1"><p>Please add at least one more username.</span>
+          <span *ngSwitchDefault>
+            <span *ngIf="movies.length == 0">
+              <p>There is no film that at least two people have put on their
+              watchlist and/or rated at least 8 ⭐.
+            </span>
+            <!-- No need to have a fake `else` clause for the list of films
+                 as it will implicitly be empty anyway and thus not have anyway
+                 UI surface. -->
+            <ol>
+              <li *ngFor="let movie of movies">
+                {{ movie }}
+              </li>
+            </ol>
+          </span>
+        </span>
       </div>
     </div>
 ''')
