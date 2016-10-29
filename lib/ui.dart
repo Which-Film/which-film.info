@@ -41,11 +41,11 @@ import 'package:which_film/processing.dart';
       </div>
       <div class="mdl-cell mdl-cell--9-col">
         <span [ngSwitch]="users.length">
-          <span *ngSwitchWhen="0"><p>Please add at least 2 usernames.</span>
+          <span *ngSwitchWhen="0"><p>Please add at least two usernames.</span>
           <span *ngSwitchWhen="1"><p>Please add at least one more username.</span>
           <span *ngSwitchDefault>
             <span *ngIf="movies.length == 0">
-              <p>There is no film that at least two people have put on their
+              <p>There are no films that at least two people have put on their
               watchlist and/or rated at least 8 ⭐.
             </span>
             <!-- No need to have a fake `else` clause for the list of films
